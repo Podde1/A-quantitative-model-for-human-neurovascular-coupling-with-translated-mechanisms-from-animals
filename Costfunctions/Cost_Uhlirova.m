@@ -70,7 +70,7 @@ end
 f=logL;
 
 %% MCMC related, save parameters to file
-if nargin == 5 && logL  < chi2inv(0.95,190) %% 190 data points in estimation data
+if nargin == 4 && logL  < chi2inv(0.95,190) %% 190 data points in estimation data
     fprintf(FID,'%4.10f %10.10f ',[f, theta']); fprintf(FID,'\n');
 end
 

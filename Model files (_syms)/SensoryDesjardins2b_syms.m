@@ -23,9 +23,9 @@ model.sym.p = [k_u1, k_u2, k_u3, kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, s
 % this part is optional and can be ommited
 
 % create parameter syms
-syms NOvsm0 PGE2vsm0 NPYvsm0 kCa tstart tend g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart HbO_0 HbR_0 SaO2_0 ScO2_0 SvO2_0 TE B0
+syms NOvsm0 PGE2vsm0 NPYvsm0 kCa tend g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart HbO_0 HbR_0 SaO2_0 ScO2_0 SvO2_0 TE B0
 % create parameter vector 
-model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, tstart, tend, g_1, g_2, g_3 ,g_s , CMRO2_0, CO2_l, pO2_femart, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, tend, g_1, g_2, g_3 ,g_s , CMRO2_0, CO2_l, pO2_femart, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
 %%
 % SYSTEM EQUATIONS

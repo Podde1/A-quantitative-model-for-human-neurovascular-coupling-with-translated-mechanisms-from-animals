@@ -18,12 +18,10 @@ sol = simulate_SSmodel(inf,theta(4:37),[Ca_start,Con],[],options);
 % assaign values to constants in the stimulation simulation
 options.x0 = sol.x(end,:).';
 
-tstart = 0.0001;
 TE = 20*10^-3;       B0 = 4.7;
 
-%Constants = [ssArt, Ca_start, tstart, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
-Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1), Con, sol.y(end, 2:6), TE, B0];
-Constants_neg = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1) + 1, Con, sol.y(end, 2:6), TE, B0]; %LFP neg seems to have 21 sec stim length
+Constants = [sol.x(end,[11 9 13]), Ca_start, stimend(1), Con, sol.y(end, 2:6), TE, B0];
+Constants_neg = [sol.x(end,[11 9 13]), Ca_start, stimend(1) + 1, Con, sol.y(end, 2:6), TE, B0]; %LFP neg seems to have 21 sec stim length
 
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-6;

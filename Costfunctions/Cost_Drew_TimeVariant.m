@@ -21,10 +21,9 @@ SvO2_0 = sol.y(6);
 
 options.x0 = sol.x(end,:).';
 
-tstart = 0.0001;
 TE = 20*10^-3;       B0 = 7;
 
-Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+Constants = [sol.x(end,[11 9 13]), Ca_start, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-6;
@@ -34,11 +33,11 @@ options.rtol = 1e-12;
     theta1=theta(1:37);
     solReal = simulate_Drew(Data.D.t,theta1, Constants, [], options);
 
-    Constants(6) = stimend(2);
+    Constants(5) = stimend(2);
     theta10=theta(1:37);
     solReal10 = simulate_Drew(Data.D10.t,theta10(1:37), Constants, [], options);
 
-    Constants(6) = stimend(3);
+    Constants(5) = stimend(3);
     solReal30_1 = simulate_Drew(Data.D30.t(1:3),theta10, Constants, [], options);
     options.x0 = solReal30_1.x(end,:).';
 
@@ -46,7 +45,7 @@ options.rtol = 1e-12;
     theta30(31:32)=theta(38:39);
     theta30(34:35)=theta(40:41);
    
-    Constants(6)=28;
+    Constants(5)= stimend(3) - solReal30_1.t(end);
     solReal30_2 = simulate_Drew(Data.D30.t(1:end-2),theta30, Constants, [], options);
 
     solReal30.t=[solReal30_1.t; solReal30_2.t(2:end)+2];
@@ -71,7 +70,7 @@ c = [];
 gc = [];
 
 %% MCMC related, save parameters to file
-if nargin == 6 && logL < chi2inv(0.95,288) 
+if nargin == 5 && logL < chi2inv(0.95,288) 
     fprintf(FID,'%4.10f %10.10f ',[f, theta']); fprintf(FID,'\n');
 end
    

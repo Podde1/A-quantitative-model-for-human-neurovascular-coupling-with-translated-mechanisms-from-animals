@@ -31,10 +31,9 @@ function [f,c,gf,gc] = Cost_Desjardins(theta,Data,Con,tend, FID)
 
     options.x0 = sol.x(end,:).';
 
-    tstart = 0.0001;
     TE = 20*10^-3;       B0 = 7;
 
-    Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+    Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
     % alter simulation tolerances, DAE solver can not handle the default values
     options.atol = 1e-6;
@@ -84,7 +83,7 @@ try
     end 
 
     
-    Constants(6) = tend(2);
+    Constants(5) = tend(2);
     % Simulation OptoGenatic Excitatory 0.1 sec stim
     %%% 1 instead of tend(2), 0.1 sec is to short to simulate as it
     %%% crashes. instead run to 1 sec as only one stim pulse occurs
@@ -111,7 +110,7 @@ try
     end 
     
     
-    Constants(6) = tend(3);
+    Constants(5) = tend(3);
 
     % Simulation Sensory 2 sec stim
     simSens2 = simulate_SensoryDesjardins2(Data.Sensory2.t(Data.Sensory2.t<=2),pSensShort,Constants, [], optSens);
@@ -175,7 +174,7 @@ c = [];
 gc = [];
 
 %% MCMC related, save parameters to file 
-if nargin == 6 && logL < chi2inv(0.95,354)
+if nargin == 5 && logL < chi2inv(0.95,354)
     fprintf(FID, '%4.10f %10.10f ', [f, theta]); fprintf(FID, '\n');
 end
 

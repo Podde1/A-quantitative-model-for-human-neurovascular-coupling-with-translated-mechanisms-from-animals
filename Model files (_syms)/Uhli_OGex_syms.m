@@ -33,7 +33,7 @@ model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, tstart, tend, g_1, g_2, g_3 ,g_s 
 syms t 
 model.sym.xdot = sym(zeros(size(model.sym.x)));
 
-u = am_stepfun(t,tstart,1,tend,0);
+u = am_if(am_gt(t,tstart),1,0)*am_if(am_lt(t,tend),1,0);
 
 model.sym.xdot(1) = +kPF1*am_max(0,N_Pyr) -kIN*am_max(0,N_NPY) -sinkN_NO*N_NO;
 model.sym.xdot(2) = +kPF2*am_max(0,N_Pyr) -kIN2*am_max(0,N_NO) -sinkN_NPY*N_NPY;

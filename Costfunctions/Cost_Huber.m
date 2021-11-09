@@ -32,7 +32,6 @@ sol = simulate_SSmodel(inf,theta(4:37),[Ca_start,Con],[],options);
 % assaign values to constants in the stimulation simulation
 options.x0 = sol.x(end,:).';
 
-tstart = 0.0001;
 TE = 20*10^-3;       B0 = 7;
 
 HbO_0 = sol.y(2);
@@ -41,7 +40,7 @@ SaO2_0 = sol.y(4);
 ScO2_0 = sol.y(5);
 SvO2_0 = sol.y(6);
 
-Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-5;
@@ -66,7 +65,7 @@ optionsInh = options;
 
     NegSim_CBV_BOLD = simulate_HuberNeg2([0,0.5, 1.5:1.5:tend(1)], thetaneg, [Constants,theta(41), theta(42), 1], [], optionsNeg);
     optionsNeg.x0 = NegSim_CBV_BOLD.x(end,:)';
-    NegSim_CBV_BOLD2 = simulate_HuberNeg2([tend(1):1.5:60] -tend(1), thetaneg, [Constants,theta(41), theta(42), 0], [], optionsNeg);
+    NegSim_CBV_BOLD2 = simulate_HuberNeg2((tend(1):1.5:60) -tend(1), thetaneg, [Constants,theta(41), theta(42), 0], [], optionsNeg);
         SimNeg.y = [NegSim_CBV_BOLD.y ; NegSim_CBV_BOLD2.y(2:end,:)];
         SimNeg.x = [NegSim_CBV_BOLD.x ; NegSim_CBV_BOLD2.x(2:end,:)];
     
@@ -80,16 +79,14 @@ optionsInh = options;
 
     ExcitatorySim = simulate_Huber2([0,0.5, 1.5:1.5:tend(1)], theta2, [Constants, 1], [], optionsExc);
     optionsExc.x0 = ExcitatorySim.x(end,:)';
-    ExcitatorySim2 = simulate_Huber2([tend(1):1.5:60] - tend(1), theta2, [Constants, 0], [], optionsExc);
+    ExcitatorySim2 = simulate_Huber2((tend(1):1.5:60) - tend(1), theta2, [Constants, 0], [], optionsExc);
         SimExc.y = [ExcitatorySim.y ; ExcitatorySim2.y(2:end,:)];
         SimExc.x = [ExcitatorySim.x ; ExcitatorySim2.x(2:end,:)];
     
         costCBVpos2 = sum((SimExc.y([1,4:2:end-2],2) - Data.CBVExcitatoryTotal.Y).^2./(Data.CBVExcitatoryTotal.Sigma_Y.^2));
-%              costCBVpos2art = sum((100*((SimExc.x([1,4:2:end-2],14) -0.29)./1) - Data.CBVExcitatoryArteriole.Y).^2./(Data.CBVExcitatoryArteriole.Sigma_Y.^2));
-%              costCBVpos2ven = sum((100*((SimExc.x([1,4:2:end-2],16) -0.27)./1) - Data.CBVExcitatoryVenule.Y).^2./(Data.CBVExcitatoryVenule.Sigma_Y.^2));
 
-         %pos CBV total, art venule
-         cost2 = costCBVpos2;% + costCBVpos2art + costCBVpos2ven;
+         % excitatory CBV total
+         cost2 = costCBVpos2;
         
 
 
@@ -99,18 +96,10 @@ optionsInh = options;
         SimInh.y = [InhibitatorySim.y ; InhibitatorySim2.y(2:end,:)];
         SimInh.x = [InhibitatorySim.x ; InhibitatorySim2.x(2:end,:)];
         costCBVneg3 = sum((SimInh.y([1,4:2:end-2],2) - Data.CBVIhibitatoryTotal.Y).^2./(Data.CBVIhibitatoryTotal.Sigma_Y.^2));
-%             costCBVneg3art = sum((100*((SimInh.x([1,4:2:end-2],14)-0.29)./1) - Data.CBVInhibitatoryArteriole.Y).^2./(Data.CBVInhibitatoryArteriole.Sigma_Y.^2));
-%             costCBVneg3ven = sum((100*((SimInh.x([1,4:2:end-2],16)-0.27)./1) - Data.CBVInhibitatoryVenule.Y).^2./(Data.CBVInhibitatoryVenule.Sigma_Y.^2));
-           
              
-        % neg CBV total, art, venule
-         cost3 = costCBVneg3;% + costCBVneg3art + costCBVneg3ven;
+        % inhibitory CBV total
+         cost3 = costCBVneg3;
              
-%              CBFP = sum((SimPos.y([1,4:2:end-2],5)-Data.CBFPos.Y).^2./(Data.CBFPos.Sigma_Y.^2));
-%              CBFN = sum((SimNeg.y([1,4:2:end-2],5)-Data.CBFNeg.Y).^2./(Data.CBFNeg.Sigma_Y.^2));
-             
-%              %CBF pos and neg
-%              cost4 = CBFP + CBFN;
              
      if (PosSim_CBV_BOLD.status<0 || NegSim_CBV_BOLD2.status<0 || ExcitatorySim.status<0 || InhibitatorySim2.status<0)
          logL=NaN;
@@ -201,7 +190,7 @@ c = [];
 gc = [];
 
 %% MCMC related, save parameters to file
-   if nargin == 6 && logL < chi2inv(0.95,122) 
+   if nargin == 5 && logL < chi2inv(0.95,122) 
         fprintf(FID,'%4.10f %10.10f ',[f, theta']); fprintf(FID,'\n');
    end
    

@@ -20,11 +20,9 @@ function [simulationOutput] = SimulateDrewTimeVariantAll(theta, Con, stimend,Dat
 
     options.x0 = sol.x(end,:).';
 
-    tstart = 0.0001;
     TE = 20*10^-3;       B0 = 7;
 
-    %Constants = [ssArt, Ca_start, tstart, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
-    Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+    Constants = [sol.x(end,[11 9 13]), Ca_start, stimend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
     % alter simulation tolerances, DAE solver can not handle the default values
     options.atol = 1e-6;
@@ -39,13 +37,13 @@ function [simulationOutput] = SimulateDrewTimeVariantAll(theta, Con, stimend,Dat
     %% Simulations
     solReal = simulate_Drew(timeV,theta(1:37), Constants, [], options);
 
-    Constants(6) = stimend(2);
+    Constants(5) = stimend(2);
     theta10 = theta(1:37);
     options.atol = 1e-5;
     options.rtol = 1e-8;
     solReal10 = simulate_Drew(timeV2,theta, Constants, [], options);
 
-    Constants(6) = stimend(3);
+    Constants(5) = stimend(3);
     solReal30_1 = simulate_Drew(timeV3,theta10, Constants, [], options);
     options.x0 = solReal30_1.x(end,:).';
 
@@ -53,7 +51,7 @@ function [simulationOutput] = SimulateDrewTimeVariantAll(theta, Con, stimend,Dat
     theta30(31:32)=theta(38:39);
     theta30(34:35)=theta(40:41);
 
-    Constants(6)=28;
+    Constants(5)=stimend(3) - solReal30_1.t(end);
     solReal30_2 = simulate_Drew(timeV3b,theta30, Constants, [], options);
     
     % concatinate the 2 parts of the 30 s stimulation simulation

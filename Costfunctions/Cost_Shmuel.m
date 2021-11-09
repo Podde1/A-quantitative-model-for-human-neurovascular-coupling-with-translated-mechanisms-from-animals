@@ -19,11 +19,10 @@ sol = simulate_SSmodel(inf,theta(4:37),[Ca_start,Con],[],options);
 % assaign values to constants in the stimulation simulation
 options.x0 = sol.x(end,:).';
 
-tstart = 0.0001;
 TE = 20*10^-3;       B0 = 4.7;
 
-Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1), Con, sol.y(end, 2:6), TE, B0];
-Constants_neg = [sol.x(end,[11 9 13]), Ca_start, tstart, stimend(1) + 1, Con, sol.y(end, 2:6), TE, B0]; %Neg stimulation set to 21 sec
+Constants = [sol.x(end,[11 9 13]), Ca_start, stimend(1), Con, sol.y(end, 2:6), TE, B0];
+Constants_neg = [sol.x(end,[11 9 13]), Ca_start, stimend(1) + 1, Con, sol.y(end, 2:6), TE, B0]; %Neg stimulation set to 21 sec
 
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-6;
@@ -92,7 +91,7 @@ f = logL;
 c = [];
 
 % MCMC related, save parameters to file
-   if nargin == 6 && logL < chi2inv(0.95,160) 
+   if nargin == 5 && logL < chi2inv(0.95,160) 
         fprintf(FID,'%4.10f %10.10f ',[f, theta']); fprintf(FID,'\n');
    end
    

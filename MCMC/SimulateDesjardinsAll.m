@@ -30,10 +30,9 @@ function [simulationOutput] = SimulateDesjardinsAll(theta,Con,tend,Data, cutOFF)
 
     options.x0 = sol.x(end,:).';
 
-    tstart = 0.0001;
     TE = 20*10^-3;       B0 = 7;
 
-    Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+    Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
     % alter simulation tolerances, DAE solver can not handle the default values
     options.atol = 1e-5;
@@ -105,7 +104,7 @@ try
     end 
 
     
-    Constants(6) = tend(2);
+    Constants(5) = tend(2);
         %%% 1 instead of tend(2), 0.1 sec is to short to simulate as it
         %%% crashes. instead run to 1 sec as only one stim pulse occurs
         %%% during this period anyways --> no difference for the model
@@ -131,7 +130,7 @@ try
     end 
     
     
-    Constants(6) = tend(3);
+    Constants(5) = tend(3);
 
         simSens2 = simulate_SensoryDesjardins2(Data.Sensory2.t(Data.Sensory2.t<=2),pSensShort,Constants, [], optSens);
         optSens.x0 = simSens2.x(end,:)';
