@@ -407,10 +407,9 @@ figure()
 
     options.x0 = sol.x(end,:).';
 
-    tstart = 0.0001;
     TE = 20*10^-3;       B0 = 7;
 
-    Constants = [sol.x(end,[11 9 13]), Ca_start, tstart, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+    Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
 
     % alter simulation tolerances, DAE solver can not handle the default values
     options.atol = 1e-6;
@@ -419,7 +418,7 @@ figure()
     optionsLong.maxsteps=1e6;    
 
 
-    Constants(6) = tend(1);
+    Constants(5) = tend(1);
         simOGin20 = simulate_OGinhibitoryDesjardins(0:1:Data.OGinhibitory20.t(end),pOGin,Constants,[] , optionsLong);
         simOGex20 = simulate_OGexcitatoryDesjardins(0:1:Data.OGexcitatory20.t(end),pOGex,Constants, [], optionsLong);
         simSens20 = simulate_SensoryDesjardins(0:1:Data.Sensory20.t(end),pSensLong,Constants,[],optionsLong);
