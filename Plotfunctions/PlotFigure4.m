@@ -68,7 +68,7 @@ NO_1=10.^(theta(27)).*(solReal.x(:,11)-solReal.x(1,11));
 
 
 %% Initialize figure
-figure()
+figure('Name', 'Figure 4_ABC')
     set(gcf,'units','centimeters')
     set(gcf,'position',[x0,y0,width,height])
     set(gcf,'Color',[1 1 1])
@@ -96,8 +96,10 @@ figure()
         t1=title(ax_x,{'0.125 s'...
                 'stimulation'});
         ylabel(ax_y,ylab_N,'FontSize',FontSize)
-
-        set(t1,'Position',[3.1 140 0])
+        
+        ax_x.XTick = [0 2 4 6];
+        ax_x.XTickLabel = [0 2 4 6];
+        set(t1,'Position',[3.1 92 0])
 
     
     
@@ -120,12 +122,15 @@ figure()
         [ax_x,ax_y]=TufteStyle(axN2);
         ax_x.FontSize=FontSize;
         ax_y.FontSize=FontSize;
+        
+        ax_x.XTick = [0 20 40];
+        ax_x.XTickLabel = [0 20 40];
 
         h_x=xlabel(ax_x,xlab,'FontSize',FontSize);
         h_x_pos=get(h_x,'Position');
         set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);
         t1=title(ax_x,'10 s stimulation');
-        set(t1,'Position',[post(1)+5 160 0])
+        set(t1,'Position',[post(1)+3 106 0])
         
    
     axN3=subplot(1,3,3);
@@ -148,6 +153,9 @@ figure()
         hlegPos=get(hleg,'Position');
         set(hleg,'Position',[hlegPos(1)+75 hlegPos(2)+10 hlegPos(3:4)]); 
         [ax_x,ax_y]=TufteStyle(axN3);
+        
+        ax_x.XTick = [0 20 40 60 80];
+        ax_x.XTickLabel = [0 20 40 60 80];
 
         ax_x.FontSize=FontSize;
         ax_y.FontSize=FontSize;
@@ -155,22 +163,19 @@ figure()
         h_x_pos=get(h_x,'Position');
         set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);
         t1=title(ax_x,'30 s stimulation');
-        set(t1,'Position',[post(1)+10 160 0])
+        set(t1,'Position',[post(1)+3 106 0])
         
-    [~,h1]=suplabel('A','t',[.05 .08 0.0 0.85]);
+    [~,h1]=suplabel('A','t',[.05 .09 0.0 0.85]);
     h1.FontSize=12;  
     
-    [~,h2]=suplabel('B','t',[.05 .08 0.55 0.85]);
+    [~,h2]=suplabel('B','t',[.05 .09 0.60 0.85]);
     h2.FontSize=12;
 
-    [~,h3]=suplabel('C','t',[.05 .08 1.2 0.85]);
+    [~,h3]=suplabel('C','t',[.05 .09 1.2 0.85]);
     h3.FontSize=12;
-
-   
- 
         
  %% Subplot 125ms Vasoactive 
-figure()
+figure('Name', 'Figure 4_EFG')
     set(gcf,'units','centimeters')
     set(gcf,'position',[x0,y0,width,height])
     set(gcf,'Color',[1 1 1])
@@ -195,13 +200,17 @@ figure()
         [ax_x,ax_y]=TufteStyle(ax1);
         h_ylabel2=ylabel(ax_y,ylab,'FontSize',FontSize);
         set(h_ylabel2,'Position',[h_ylabel2.Position(1) h_ylabel2.Position(2) h_ylabel2.Position(3)])
-
+        
+        ax_x.XTick = [0 2 4 6];
+        ax_x.XTickLabel = [0 2 4 6];
+        
         ax_x.FontSize=FontSize;
         ax_y.FontSize=FontSize;
         h_x=xlabel(ax_x,xlab,'FontSize',FontSize);
         h_x_pos=get(h_x,'Position');
-        set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);t1=title(ax_x,'0.125 s stimulation');
-        set(t1,'Position',[post(1) 160 0])
+        set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);t1=title(ax_x,{'0.125 s'... 
+            'stimulation'});
+        set(t1,'Position',[post(1) 92 0])
 
 
 
@@ -233,7 +242,11 @@ figure()
         h_x_pos=get(h_x,'Position');
         set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);
         t2=title(ax_x,'10 s stimulation');
-        set(t2,'Position',[post2(1) 159 0])
+        
+        ax_x.XTick = [0 20 40];
+        ax_x.XTickLabel = [0 20 40];
+        
+        set(t2,'Position',[post2(1) 106 0])
 
 
 
@@ -267,12 +280,14 @@ figure()
         [hleg3,object_h2,plot_h2,text_str2]=legendflex(l4,{['Total: \color[rgb]{0.949 0.721 0.274}{PGE_{2, SMC}} ' char(10) '\color{black}{+} \color[rgb]{0.443 0.965 0.423}{NO_{SMC}} \color{black}{-} \color[rgb]{0.647 0.659 0.471}{NPY_{SMC}}']},'anchor',[3 1],'ncol',0,'nrow',0,'fontsize',8,'xscale',0.2, 'box','off','padding',[0 0 0]);
         set(hleg3,'Position',[hleg3.Position(1)+85 hleg3.Position(2)-60 hleg3.Position(3:4)])
 
- 
+        ax_x.XTick = [0 20 40 60 80];
+        ax_x.XTickLabel = [0 20 40 60 80];
+        
         h_x=xlabel(ax_x,xlab,'FontSize',FontSize);
         h_x_pos=get(h_x,'Position');
         set(h_x,'Position',[h_x_pos(1) h_x_pos(2)+7]);
         t3=title(ax_x,'30 s stimulation');
-        set(t3,'Position',[post3(1) 160 0])
+        set(t3,'Position',[post3(1) 106 0])
         
         
     [~,h4]=suplabel('E','t',[.05 .08 0.02 0.85]);

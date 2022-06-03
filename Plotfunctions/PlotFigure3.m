@@ -6,13 +6,13 @@ ylab_a={'Arteriolar diameter change (\Delta%)'};
 ylab_v={'Venular diameter change (\Delta%)'};
 
 xlab={'Time (seconds)'};
-FontSize=10;
+FontSize=14;
 x0=0;
 y0=0;
-width=16;
-height=20;
+width=19.05;
+height=22.23;
 simScale=0.1;
-titleY=440;
+titleY=320;
 startTime=1e-5;
 
 % time vectors and indexs to match time series with the data
@@ -24,7 +24,7 @@ index1 = 1:(Data.D.t(end)*(1/simScale));
 index2 = 1:(Data.D10.t(end)*(1/simScale)); 
 index3 = 1:(Data.D30.t(end)*(1/simScale)); 
 
-figure()
+figure('Name', 'Figure 3')
     set(gcf,'units','centimeters')
         set(gcf,'position',[x0,y0,width,height])
         set(gcf,'Color',[1 1 1])
@@ -47,28 +47,31 @@ figure()
 
         rectangle('Position',[0,-2,0.125,sizebar*sum(abs(h125msA.YLim))],'FaceColor','k')
         hold off
-        xlabel(xlab,'FontSize',FontSize)
         
         ax=gca;
         pXlim=[0 Data.D.t(end)];
         set(gca,'Xlim',pXlim)
+        
+        % Increase width
+        pos=get(ax,'Position');
+        set(ax,'Position',[pos(1)-0.02 pos(2)-0.02 pos(3)+0.02 pos(4)+0.04])
 
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
+        hold off
+
+        ylabel(ax_y,ylab_a,'FontSize',FontSize,'Interpreter','tex')
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
+        
         [hleg]=legend([e1,l1,c2],{'Experimental Data','Model Simulation','Model uncertainty'},'FontSize',10,'Location','best');
         hleg.ItemTokenSize=[10 10];
         hleg.Box='off';
         hleg.Position(1)=hleg.Position(1);
         
-        % Increase width
-        pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.04 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
-
-        [ax_x,ax_y]=TufteStyle(ax);
-        hold off
-
-        ylabel(ax_y,ylab_a,'FontSize',FontSize,'Interpreter','tex')
-        
         % Title
-        Htitle=title(ax_x,'Arterioles','FontSize',FontSize);
+        Htitle=title(ax_x,'Arterioles','FontSize',FontSize+2);
         pos=get(Htitle,'Position');
         titlepos=pos(1);
         set(Htitle,'Position',[titlepos titleY]);
@@ -92,8 +95,6 @@ figure()
         rectangle('Position',[0,-2,0.125,sizebar*sum(abs(h125msv.YLim))],'FaceColor','k')
         hold off
 
-        xlabel(xlab,'FontSize',FontSize)
-
         axis tight
         ax=gca;
         pXlim=[0 Data.D.t(end)];
@@ -103,15 +104,21 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.04 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)-0.02 pos(2)-0.03 pos(3)+0.02 pos(4)+0.04])
+        
         [hleg2]=legend([e2,l2,c2],{'Experimental Data','Model Simulation','Model Uncertainty'},'FontSize',10,'Location','best');
         hleg2.ItemTokenSize=[10 10];
         hleg2.Box='off';
         hleg2.Position(1)=hleg.Position(1);
+        
         [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
         hold off
 
-        ylabel(ax_y,ylab_v,'FontSize',FontSize)
+        ylabel(ax_y,ylab_v,'FontSize',FontSize+2)
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
         
         % Title
         Htitle=title(ax_x,'Venules','FontSize',FontSize);
@@ -122,8 +129,7 @@ figure()
         %% Add overaching title
         [~,h3_1]=suplabel('0.125 s stimulation'  ,'t');
         h3_1.FontSize=14;
-        h3_1.Position(2)=h3_1.Position(2)+0.02;       
-
+        h3_1.Position(2)=h3_1.Position(2)-0.0;       
 
 
     %% 10 s arteriolar
@@ -140,7 +146,6 @@ figure()
         axis([0 95 -10 40])
         rectangle('Position',[0,-2,10,sizebar*sum(abs(h125msA.YLim))],'FaceColor','k')
         hold off
-        xlabel(xlab,'FontSize',FontSize)
 
         axis tight
         ax=gca;
@@ -150,10 +155,15 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.01 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.01 pos(2)-0.02 pos(3)+0.02 pos(4)+0.04])
 
-        [ax_x,~]=TufteStyle(ax);
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
         hold off
+        
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
 
         % Title
         Htitle=title(ax_x,'Arterioles','FontSize',FontSize);
@@ -176,10 +186,8 @@ figure()
         hold on
 
         plot(timeV2,Res.D10.Ven.sim(index2),'b-','linewidth',2)
-        axis([0 40 -6 10])
         rectangle('Position',[0,-2,10,sizebar*sum(abs(h125msv.YLim))],'FaceColor','k')
         hold off
-        xlabel(xlab,'FontSize',FontSize)
         axis([0 40 -3 10])
 
         axis tight
@@ -187,23 +195,22 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.01 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
-
-        [ax_x,~]=TufteStyle(ax);
+        set(ax,'Position',[pos(1)+0.01 pos(2)-0.03 pos(3)+0.02 pos(4)+0.04])
+        set(gca,'Ylim',[-3 10]);
+        
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
         hold off
+        
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
 
         % Title
         Htitle=title(ax_x,'Venules','FontSize',FontSize);
         pos=get(Htitle,'Position');
         titlepos=pos(1);
         set(Htitle,'Position',[titlepos titleY]);
-
-        %% Add overaching title
-        [~,h3_2]=suplabel('10 s stimulation'  ,'t');
-        h3_2.FontSize=14;
-        h3_2.Position=h3_1.Position;
-        h3_2.Position(1)=h3_2.Position(1)+0.25;
-
         
     %% 30 s arterioles
     h30sa = subplot(2,3,3);
@@ -221,17 +228,20 @@ figure()
         axis([0 95 -5 30])
         rectangle('Position',[0,-2,30,sizebar*sum(abs(h125msA.YLim))],'FaceColor','k')
         hold off
-        xlabel(xlab,'FontSize',FontSize)
 
         ax=gca;
 
-
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0.02 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.04 pos(2)-0.02 pos(3)+0.02 pos(4)+0.04])
 
-        [ax_x,~]=TufteStyle(ax);
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
         hold off
+        
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
 
         % Title
         Htitle=title(ax_x,'Arterioles','FontSize',FontSize);
@@ -257,16 +267,19 @@ figure()
         rectangle('Position',[0,-2,30,sizebar*sum(abs(h125msv.YLim))],'FaceColor','k')
         hold off
 
-
         ax=gca;
-        xlabel(xlab,'FontSize',FontSize)
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0.02 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.04 pos(2)-0.03 pos(3)+0.02 pos(4)+0.04])
 
-        [ax_x,~]=TufteStyle(ax);
-
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize  = 13;
+        ax_y.FontSize  = 13;
+        
+        x = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x.Position(2) = x.Position(2) + 3;
+        
         % Title
         Htitle=title(ax_x,'Venules','FontSize',FontSize);
         pos=get(Htitle,'Position');
@@ -274,27 +287,30 @@ figure()
         set(Htitle,'Position',[titlepos titleY]);
 
         %% Add overaching title
+        [~,h3_2]=suplabel('10 s stimulation'  ,'t');
+        h3_2.FontSize=14;
+        h3_2.Position(1)=h3_2.Position(1);
+        
         [~,h3_3]=suplabel('30 s stimulation','t');
         h3_3.FontSize=14;
-        h3_3.Position=h3_1.Position;
         h3_3.Position(1)=h3_3.Position(1)+0.32;
         
         %% Annotations
         [~,hIn_1]=suplabel('A','t',[.02 .08 0 .87]);
         hIn_1.FontSize=14;
         
-        [~,h10s_l1]=suplabel('B','t',[.02 .08 0.65 .87]);
+        [~,h10s_l1]=suplabel('B','t',[.02 .08 0.66 .87]);
         h10s_l1.FontSize=14;
         
-        [~,h30s_l]=suplabel('C','t',[.08 .08 1.15 .87]);
+        [~,h30s_l]=suplabel('C','t',[.08 .08 1.16 .87]);
         h30s_l.FontSize=14;
         
         [~,hIn_2]=suplabel('D','t',[.02 .08 0 .4]);
         hIn_2.FontSize=14;
         
-        [~,h10s_l2]=suplabel('E','t',[.02 .08 0.65 .4]);
+        [~,h10s_l2]=suplabel('E','t',[.02 .08 0.66 .4]);
         h10s_l2.FontSize=14;
         
-        [~,h30s_2]=suplabel('F','t',[.08 .08 1.15 .4]);
+        [~,h30s_2]=suplabel('F','t',[.08 .08 1.16 .4]);
         h30s_2.FontSize=14;
-        
+           

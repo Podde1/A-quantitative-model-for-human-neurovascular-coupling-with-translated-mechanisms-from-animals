@@ -4,21 +4,21 @@ Data = DesjardinsData;
 Res = DesjardinsSimulation;
 
 ylab={'\DeltaHb\it{X} \rm(\muM)'};
-ylab_2={'\DeltaHb\it{X} \rm(\muM) / BOLD (\Delta%)'};
+ylab_2={'BOLD (\Delta%)'};
 ylab_Vasc={'VSM effect (AU)'};
 xlab={'Time (seconds)'};
 
 FontSize=16;
 x0=0;
 y0=0;
-width=44.45;
-height=25.85;
+width=19.05;
+height=22.23;
 titleY=245;
 
 CBOLD = [207 17 220]./255;
 CHbT = [8 128 60]./255;
 CHbO = [174 26 26]./255;
-CHbR = [95 207 229]./255;
+CHbR = [32 170 197]./255;
 CNOVSM = [113 246 108]./255;
 CNPYVSM = [165 168 120]./255;
 CPGE2VSM = [242 184 70]./255;
@@ -32,25 +32,23 @@ timeV6= 1:size(Data.Sensory2.t,1);
 timeV7= 1:size(Data.OGexcitatory20BOLD.t,1);
 
 
-figure()
+figure('Name', 'Figure 5_plots')
     set(gcf,'units','centimeters')
         set(gcf,'position',[x0,y0,width,height])
         set(gcf,'Color',[1 1 1])
         sizebar=0.02;
         
- 
-        
-    hOGin01 = subplot(3,4,1);
+    hOGin01 = subplot(4,3,1);
     hOGin01.FontSize=FontSize;
-
+    
         %% Unc plot
         hold on               
         c=ciplot(Res.OGinhibitory01.HbT.min(timeV2),Res.OGinhibitory01.HbT.max(timeV2),Data.OGinhibitory01.t,CHbT);
-        c.EdgeColor=CHbT;
+        c.EdgeColor='w';
         c2=ciplot(Res.OGinhibitory01.HbO.min(timeV2),Res.OGinhibitory01.HbO.max(timeV2),Data.OGinhibitory01.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
         c3=ciplot(Res.OGinhibitory01.HbR.min(timeV2),Res.OGinhibitory01.HbR.max(timeV2),Data.OGinhibitory01.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -78,9 +76,11 @@ figure()
         
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.06 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.02 pos(2)+0.02 pos(3)+0.02 pos(4)])
 
-        [~,ax_y]=TufteStyle(ax);
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         hold off
 
         ylabel(ax_y,ylab,'FontSize',FontSize)
@@ -89,20 +89,21 @@ figure()
         Htitle1 = title({'\fontsize{14} OG inhibitory'...
             '\fontsize{12} 0.1s stimulation'},'interpreter','tex');
         Htitle1.Visible = 'on';
-        Htitle1.Position(1) = 275;   
-        Htitle1.Position(2) = 3.5; 
+        Htitle1.Position(1) = 110;   
+        Htitle1.Position(2) = 3.0; 
 
 
 %% OG excitatory 0.1s 
-    hOGex01 = subplot(3,4,2);
+    hOGex01 = subplot(4,3,2);
     hOGex01.FontSize=FontSize;
+    
         hold on
         c=ciplot(Res.OGexcitatory01.HbT.min(timeV3),Res.OGexcitatory01.HbT.max(timeV3),Data.OGexcitatory01.t,CHbT);
-        c.EdgeColor=CHbT;              
+        c.EdgeColor='w';             
         c2=ciplot(Res.OGexcitatory01.HbO.min(timeV3),Res.OGexcitatory01.HbO.max(timeV3),Data.OGexcitatory01.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
         c3=ciplot(Res.OGexcitatory01.HbR.min(timeV3),Res.OGexcitatory01.HbR.max(timeV3),Data.OGexcitatory01.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -128,28 +129,30 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.03 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.04 pos(2)+0.02 pos(3)+0.02 pos(4)])
 
-        [~,~]=TufteStyle(ax);
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         hold off
    
     Htitle2 = title({'\fontsize{14} OG excitatory'...
         '\fontsize{12} 0.1s stimulation'},'interpreter','tex');
-    Htitle2.Position(1) = 275;   
-    Htitle2.Position(2) = 7; 
+    Htitle2.Position(1) = 110;   
+    Htitle2.Position(2) = 6.5; 
     
 
 
 %% Sensory Short
-    hSens2 = subplot(3,4,3);
+    hSens2 = subplot(4,3,3);
     hSens2.FontSize = 1.4;
         hold on
         c=ciplot(Res.Sensory2.HbT.min(timeV6),Res.Sensory2.HbT.max(timeV6),Data.Sensory2.t,CHbT);
-        c.EdgeColor=CHbT;
+        c.EdgeColor='w';
         c2=ciplot(Res.Sensory2.HbO.min(timeV6),Res.Sensory2.HbO.max(timeV6),Data.Sensory2.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
         c3=ciplot(Res.Sensory2.HbR.min(timeV6),Res.Sensory2.HbR.max(timeV6),Data.Sensory2.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -174,32 +177,36 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.06 pos(2)+0.02 pos(3)+0.02 pos(4)])
 
-        [ax_x,~]=TufteStyle(ax);
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 5 10];
         ax_x.XTickLabel = [0 5 10];
+        ax_y.YTick = [-1 0 1 2];
+        ax_y.YTickLabel = [-1 0 1 2];
 
         % Title
         Htitle3 = title({'\fontsize{14} Sensory' ...
             '\fontsize{12} 2s stimulation'},'interpreter','tex');
-        Htitle3.Position(1) = 275;   
-        Htitle3.Position(2) = 1.5; 
+        Htitle3.Position(1) = 110;   
+        Htitle3.Position(2) = 1.60; 
         
         
         
-%% OG INhibitory 20
-    hOGin20= subplot(3,4,5);
+%% OG Inhibitory 20
+    hOGin20= subplot(4,3,4);
     hOGin20.FontSize=FontSize;
         hold on     
         c=ciplot(Res.OGinhibitory20.HbT.min(timeV),Res.OGinhibitory20.HbT.max(timeV),Data.OGinhibitory20.t,CHbT);
-        c.EdgeColor=CHbT;
+        c.EdgeColor='w';
           
         c2=ciplot(Res.OGinhibitory20.HbO.min(timeV),Res.OGinhibitory20.HbO.max(timeV),Data.OGinhibitory20.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
 
         c3=ciplot(Res.OGinhibitory20.HbR.min(timeV),Res.OGinhibitory20.HbR.max(timeV),Data.OGinhibitory20.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -227,32 +234,35 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.06 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.02 pos(2)+0.03 pos(3)+0.02 pos(4)])
 
         [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 20 40 60];
         ax_x.XTickLabel = [0 20 40 60];
         hold off
 
-        ylabel(ax_y,ylab_2,'FontSize',FontSize,'Interpreter','tex')
+        ylabel(ax_y,ylab,'FontSize',FontSize,'Interpreter','tex')
+%         xlabel(ax_x,xlab,'FontSize',FontSize,'Interpreter','tex')
         
         % Title
         Htitle=title(ax_x,'20s stimulation','FontSize',12);
         pos=get(Htitle,'Position');
         titlepos=pos(1);
-        set(Htitle,'Position',[titlepos titleY+120]);
+        set(Htitle,'Position',[titlepos+5 titleY-115]);
 
 %% OG EXCITATORY 20s
-    hOGex20 = subplot(3,4,6);
+    hOGex20 = subplot(4,3,5);
     hOGex20.FontSize=FontSize;
         hold on
         c=ciplot(Res.OGexcitatory20.HbT.min(timeV4),Res.OGexcitatory20.HbT.max(timeV4),Data.OGexcitatory20.t,CHbT);
-        c.EdgeColor=CHbT;
+        c.EdgeColor='w';
         hold on               
         c2=ciplot(Res.OGexcitatory20.HbO.min(timeV4),Res.OGexcitatory20.HbO.max(timeV4),Data.OGexcitatory20.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
         c3=ciplot(Res.OGexcitatory20.HbR.min(timeV4),Res.OGexcitatory20.HbR.max(timeV4),Data.OGexcitatory20.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -277,31 +287,33 @@ figure()
 
         % Increase width
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.03 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
-
-        [ax_x,~]=TufteStyle(ax);
+        set(ax,'Position',[pos(1)+0.04 pos(2)+0.03 pos(3)+0.02 pos(4)])
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 20 40 60];
         ax_x.XTickLabel = [0 20 40 60];
         hold off
-
+        
+%         xlabel(ax_x,xlab,'FontSize',FontSize,'Interpreter','tex')
         % Title
         Htitle=title(ax_x,'20s stimulation','FontSize',12);
         pos=get(Htitle,'Position');
         titlepos=pos(1);
-        set(Htitle,'Position',[titlepos+2 titleY+120]);
+        set(Htitle,'Position',[titlepos+5 titleY-115]);
               
   
 
 %% Sensory long
-    hSens20 = subplot(3,4,7);
+    hSens20 = subplot(4,3,6);
     hSens20.FontSize = 1.4;
         hold on
         c=ciplot(Res.Sensory20.HbT.min(timeV5),Res.Sensory20.HbT.max(timeV5),Data.Sensory20.t,CHbT);
-        c.EdgeColor=CHbT;              
+        c.EdgeColor='w';             
         c2=ciplot(Res.Sensory20.HbO.min(timeV5),Res.Sensory20.HbO.max(timeV5),Data.Sensory20.t,CHbO);
-        c2.EdgeColor=CHbO;
+        c2.EdgeColor='w';
         c3=ciplot(Res.Sensory20.HbR.min(timeV5),Res.Sensory20.HbR.max(timeV5),Data.Sensory20.t,CHbR);
-        c3.EdgeColor=CHbR;
+        c3.EdgeColor='w';
 
         alpha(c,.2);
         uistack(c,'bottom');
@@ -326,53 +338,23 @@ figure()
         ax=gca;
         
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
-
+        set(ax,'Position',[pos(1)+0.06 pos(2)+0.03 pos(3)+0.02 pos(4)])
         [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 20 40 60];
         ax_x.XTickLabel = [0 20 40 60];
         ax_y.YLim(2) = 7;
         ax_y.YTick = [-2 0 2 4 6]; 
         ax_y.YTickLabel = [-2 0 2 4 6];
         hold off
-
+        
+%         xlabel(ax_x,xlab,'FontSize',FontSize,'Interpreter','tex')
         % Title
         Htitle=title(ax_x,'20s stimulation','FontSize',12);
         pos=get(Htitle,'Position');
         titlepos=pos(1);
-        set(Htitle,'Position',[titlepos titleY+120]);
-    
-        
-%% BOLD 
-    hBOLDval = subplot(3,4,8);
-        hold on
-        c4=ciplot(Res.OGexcitatory20BOLD.BOLD.min(timeV7),Res.OGexcitatory20BOLD.BOLD.max(timeV7),Data.OGexcitatory20BOLD.t,CBOLD);
-        c4.EdgeColor=CBOLD;
-        alpha(c4,.2);
-        uistack(c4,'bottom');
-        d4=errorbar(Data.OGexcitatory20BOLD.t,Data.OGexcitatory20BOLD.Y(:,:),Data.OGexcitatory20BOLD.Sigma_Y(:,:),'*','color', CBOLD);
-
-        hold off
-        xlabel(xlab,'FontSize',FontSize)
-        axis([0 60 -1 4.1])
-        rectangle('Position',[0,-0.5,20,sizebar*sum(abs(hBOLDval.YLim))*0.7],'FaceColor','k')
-
-        ax=gca;
-        pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0.01 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
-        
-        % Increase width
-        [ax_xBOLD,~]=TufteStyle(ax);
-        ax_xBOLD.XTick = [0 20 40 60];
-        ax_xBOLD.XTickLabel = [0 20 40 60];
-        
-        hold off      
-
-        % Title  
-        Htitle=title(ax_xBOLD,'20s stimulation','FontSize',12);
-        pos=get(Htitle,'Position');
-        titlepos=pos(1);
-        set(Htitle,'Position',[titlepos titleY+130]);
+        set(Htitle,'Position',[titlepos+5 titleY-115]);
         
         
 %% Vascular plots - simulation 
@@ -435,7 +417,7 @@ figure()
     PGEVSM3 = 10^pSensLong(28)*(simSens20.x(:,9)-simSens20.x(1,9));
     NPYVSM3 = 10^pSensLong(29)*(simSens20.x(:,13)-simSens20.x(1,13));    
 %% Vascular stimuli OG in
-    hVascOGin = subplot(3,4,9);
+    hVascOGin = subplot(4,3,7);
         hold on 
         NO = plot(simOGin20.t, NOVSM, '-', 'color', CNOVSM, 'linewidth', 2);
         NPY = plot(simOGin20.t, NPYVSM, '-', 'color', CNPYVSM, 'linewidth', 2);
@@ -446,20 +428,23 @@ figure()
         axis tight
         hold off
         
-        ylabel(ylab_Vasc, 'FontSize', FontSize)
-        xlabel(xlab,'FontSize',FontSize)
-        
-        ax=gca;
+        ax = gca;
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.06 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.02 pos(2)+0.01 pos(3)+0.02 pos(4)])
 
         [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 20 40 60];
         ax_x.XTickLabel = [0 20 40 60];
         ax_y.YLim = [(min([NOVSM; NPYVSM; PGEVSM])-0.03), max([NOVSM; NPYVSM; PGEVSM])];
+        
+        ylabel(ylab_Vasc, 'FontSize', FontSize,'Interpreter','tex')
+        x11 = xlabel(ax_x,xlab,'FontSize',FontSize);
+        x11.Position(2) = x11.Position(2) + 10;
 
 %% Vascular stimuli OG ex
-    hVascOGex = subplot(3,4,10);
+    hVascOGex = subplot(4,3,8);
         hold on 
         NO2 = plot(simOGex20.t, NOVSM2, '-', 'color', CNOVSM, 'linewidth', 2);
         NPY2 = plot(simOGex20.t, NPYVSM2, '-', 'color', CNPYVSM, 'linewidth', 2);
@@ -468,19 +453,23 @@ figure()
         axis([0 60 min([NOVSM2; NPYVSM2; PGEVSM2]) max([NOVSM2; NPYVSM2; PGEVSM2])])
         rectangle('Position',[0, (min([NOVSM2; NPYVSM2; PGEVSM2])-0.05) ,20,sizebar*sum(abs(hVascOGex.YLim))*1.2],'FaceColor','k')
         hold off      
-        
-        xlabel(xlab,'FontSize',FontSize)
+
         ax=gca;
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)-0.03 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.04 pos(2)+0.01 pos(3)+0.02 pos(4)])
 
         [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
         ax_x.XTick = [0 20 40 60];
         ax_x.XTickLabel = [0 20 40 60];
         ax_y.YLim = [(min([NOVSM2; NPYVSM2; PGEVSM2])-0.05), max([NOVSM2; NPYVSM2; PGEVSM2])];
+        
+        x12 = xlabel(ax_x,xlab,'FontSize',FontSize,'Interpreter','tex');
+        x12.Position(2) = x12.Position(2) + 10;
 
 %% Vascular stimuli Sens
-    hVascSens = subplot(3,4,11);
+    hVascSens = subplot(4,3,9);
         hold on 
         NO3 = plot(simSens20.t, NOVSM3, '-', 'color', CNOVSM, 'linewidth', 2);
         NPY3 = plot(simSens20.t, NPYVSM3, '-', 'color', CNPYVSM, 'linewidth', 2);
@@ -490,98 +479,165 @@ figure()
         rectangle('Position',[0,(min([NOVSM3; NPYVSM3; PGEVSM3])-0.03),20,sizebar*sum(abs(hVascSens.YLim))*1.2],'FaceColor','k')
         hold off      
 
-        xlabel(xlab,'FontSize',FontSize)
+        ax=gca;
+        pos=get(ax,'Position');
+        set(ax,'Position',[pos(1)+0.06 pos(2)+0.01 pos(3)+0.02 pos(4)])
+
+        [ax_x,ax_y]=TufteStyle(ax);
+        ax_x.FontSize = 13;
+        ax_y.FontSize = 13;
+        ax_x.XTick = [0 20 40 60];
+        ax_x.XTickLabel = [0 20 40 60];
+        ax_y.YTick = [-0.1 0 0.1 0.2];
+        ax_y.YTickLabel = [-0.1 0 0.1 0.2];
+        ax_y.YLim = [(min([NOVSM3; NPYVSM3; PGEVSM3])-0.03), max([NOVSM3; NPYVSM3; PGEVSM3])];
+        
+        x13 = xlabel(ax_x,xlab,'FontSize',FontSize,'Interpreter','tex');
+        x13.Position(2) = x13.Position(2) + 10;
+       
+%% BOLD 
+    hBOLDval = subplot(4,3,10);
+        hold on
+        c4=ciplot(Res.OGexcitatory20BOLD.BOLD.min(timeV7),Res.OGexcitatory20BOLD.BOLD.max(timeV7),Data.OGexcitatory20BOLD.t,CBOLD);
+        c4.EdgeColor='w';
+        alpha(c4,.2);
+        uistack(c4,'bottom');
+        d4=errorbar(Data.OGexcitatory20BOLD.t,Data.OGexcitatory20BOLD.Y(:,:),Data.OGexcitatory20BOLD.Sigma_Y(:,:),'*','color', CBOLD);
+
+        hold off
+        axis([0 60 -1 4.1])
+        rectangle('Position',[0,-0.5,20,sizebar*sum(abs(hBOLDval.YLim))*0.7],'FaceColor','k')
 
         ax=gca;
         pos=get(ax,'Position');
-        set(ax,'Position',[pos(1)+0 pos(2)-0.04 pos(3)+0.02 pos(4)+0.04])
+        set(ax,'Position',[pos(1)+0.02 pos(2)-0.04 pos(3)+0.02 pos(4)])
+        
+        % Increase width
+        [ax_xBOLD,ax_yBOLD]=TufteStyle(ax);
+        ax_xBOLD.FontSize = 13;
+        ax_yBOLD.FontSize = 13;
+        ax_xBOLD.XTick = [0 20 40 60];
+        ax_xBOLD.XTickLabel = [0 20 40 60];
+        
+        ylabel(ax_yBOLD,ylab_2,'FontSize',FontSize,'Interpreter','tex')
+        x1 = xlabel(ax_xBOLD,xlab,'FontSize',FontSize,'Interpreter','tex');
+        x1.Position(2) = x1.Position(2) + 10;    
 
-        [ax_x,ax_y]=TufteStyle(ax);
-        ax_x.XTick = [0 20 40 60];
-        ax_x.XTickLabel = [0 20 40 60];
-        ax_y.YLim = [(min([NOVSM3; NPYVSM3; PGEVSM3])-0.03), max([NOVSM3; NPYVSM3; PGEVSM3])];
-        
-        
+        % Title  
+        Htitle=title(ax_xBOLD,'20s stimulation','FontSize',12);
+        pos=get(Htitle,'Position');
+        titlepos=pos(1);
+        set(Htitle,'Position',[titlepos titleY-112]);
         
         
 %% extra y-label
-    hTx1=text(18,-0.2,'New Data','horizontalalign','right','rotation',90,'verticalalign','Top');
-    hTx1.FontSize = 20;
-    hTx1.Position = [-1530 0.85 0];
-    hTx2=text(18,0.2,'Preserved mechanisms','horizontalalign','left','rotation',90,'verticalalign','Top');
-    hTx2.FontSize = 20;
-    hTx2.Position = [-1530 -0.15 0];
+    hTx11=text(-100,23.50,'New data','horizontalalign','right','rotation',90,'verticalalign','Top');
+    hTx11.FontSize = 18;
+    
+%     hTx12=text(-100,19.65,'New data','horizontalalign','right','rotation',90,'verticalalign','Top');
+%     hTx12.FontSize = 20;
+    
+    hTx13=text(-100,3.3,'New data','horizontalalign','right','rotation',90,'verticalalign','Top');
+    hTx13.FontSize = 18;
+
+    hTx2=text(-100,5.8,'Preserved mechanisms','horizontalalign','left','rotation',90,'verticalalign','Top');
+    hTx2.FontSize = 18;
+    
+%% Titels
+    ahHb=axes('position',get(gca,'position'),'visible','off'); 
+
+    HtitleHb = title(ahHb,{'\fontsize{14} Hemoglobin dynamics upon short and long sensory/OG challenge'},'interpreter','tex');
+    HtitleHb.Visible = 'on';
+    HtitleHb.Position(1:2) = [300 5.77];    
+    
+    ahBOLD=axes('position',get(gca,'position'),'visible','off'); 
+
+    HtitleBOLD = title(ahBOLD,{'\fontsize{14} Predicted BOLD response'},'interpreter','tex');
+    HtitleBOLD.Visible = 'on';
+    HtitleBOLD.Position(1:2) = [90 1.1];   
+    
+    ahVasc=axes('position',get(gca,'position'),'visible','off'); 
+
+    ahVasc = title(ahVasc,{'\fontsize{14} Predicted vasoactive effect of the three neuron types'},'interpreter','tex');
+    ahVasc.Visible = 'on';
+    ahVasc.Position(1:2) = [310 2.79];   
 %% numbering of subplots
-        [~,hA]=suplabel('A','t',[.02 .08 0 .85]);
+        [~,hA]=suplabel('A','t',[.02 .08 0 .88]);
         hA.FontSize=14;
-        hA.Position(1) = 65;
+        hA.Position(1) = 60;
         
-        [~,hB]=suplabel('B','t',[.02 .08 0.52 .85]);
+        [~,hB]=suplabel('B','t',[.02 .08 0.77 .88]);
         hB.FontSize=14;
 
-        [~,hC]=suplabel('C','t',[.08 .08 0.87 .85]);
+        [~,hC]=suplabel('C','t',[.08 .08 1.26 .88]);
         hC.FontSize=14;
 
-        [~,hD]=suplabel('D','t',[.02 .08 0 .55]);
+        [~,hD]=suplabel('D','t',[.02 .08 0 .655]);
         hD.FontSize=14;
-        hD.Position(1) = 65;
+        hD.Position(1) = 60;
         
-        [~,hE]=suplabel('E','t',[.02 .08 0.52 .55]);
+        [~,hE]=suplabel('E','t',[.02 .08 0.77 .655]);
         hE.FontSize=14;
         
-        [~,hF]=suplabel('F','t',[.08 .08 0.87 .55]);
+        [~,hF]=suplabel('F','t',[.08 .08 1.26 .655]);
         hF.FontSize=14;
-        
-        [~,hG]=suplabel('G','t',[.08 .08 1.29 .54]);
+     
+        [~,hG]=suplabel('G','t',[.02 .08 0 .415]);
         hG.FontSize=14;
-        hG.Position(1) = 0.505;
+        hG.Position(1) = 60;
         
-        [~,hH]=suplabel('H','t',[.02 .08 0 .24]);
+        [~,hH]=suplabel('H','t',[.02 .08 0.77 .415]);
         hH.FontSize=14;
-        hH.Position(1) = 60;
         
-        [~,hI]=suplabel('I','t',[.08 .08 0.4 .24]);
+        [~,hI]=suplabel('I','t',[.08 .08 1.26 .415]);
         hI.FontSize=14;
         
-        [~,hJ]=suplabel('J','t',[.08 .08 0.86 .24]);
+        [~,hJ]=suplabel('J','t',[.02 .08 0 .15]);
         hJ.FontSize=14;
-
-        
+        hJ.Position(1) = 60;
+%         
         
   %% Legends
+    
+        [hleg]=legend([p2,p1,p3],{'HbT','HbO','HbR'},'FontSize',14,'Location','best');
+        hleg.ItemTokenSize=[10 10];
+        hleg.Box='off';
+        hleg.Position(1)=hleg.Position(1)+0.06;
+        hleg.Position(1:2)=[0.55 0.11];
+        
+        ahLEG=axes('position',get(gca,'position'),'visible','off'); 
+        titleLEG = title(ahLEG,{'\fontsize{14}' 'Model simulations,'... 
+            'data, uncertainties'},'interpreter','tex');
+        titleLEG.Visible = 'on';
+        titleLEG.Position(1:2) = [320 0.82]; 
+        
+            ah0=axes('position',get(gca,'position'),'visible','off'); 
+            [hleg2]=legend(ah0,[e2,e1,e3],{'','',''},'FontSize',14,'Location','best');
+            hleg2.ItemTokenSize=[10 10];
+            hleg2.Box='off';
+            hleg2.Position(1)=hleg.Position(1)+0.06;
+            hleg2.Position(1:2)=[0.532 0.11];
+            
+            ah01=axes('position',get(gca,'position'),'visible','off'); 
+            [hleg3]=legend(ah01,[c2,c,c3],{'','',''},'FontSize',14,'Location','best');
+            hleg3.ItemTokenSize=[10 10];
+            hleg3.Box='off';
+            hleg3.Position(1)=hleg.Position(1)+0.06;
+            hleg3.Position(1:2)=[0.51 0.11];
   
-    [hlegSim]=legend([p2,p3,p1],{'Oxygenated Hemoglobin (HbO)','Deoxygenated Hemoglobin (HbR)','Total Hemoglobin (HbT)'},'FontSize',14,'Location','best');
-    hlegSim.ItemTokenSize=[10 8];
-    hlegSim.Box='off';
-    hlegSim.Position(1:2)= [0.73,0.85];
-    title(hlegSim, 'Model simulations')
-      
-     ah1=axes('position',get(gca,'position'),'visible','off'); 
-        [hlegData]=legend(ah1,[e2,e3,e1], {'HbO', 'HbR', 'HbT'}, 'FontSize',14);
-        hlegData.ItemTokenSize=[10 8];
-        hlegData.Box='off';
-        hlegData.Position(1)=hlegData.Position(1)+0.06;
-        hlegData.Position(1:2)=[0.91 0.85];
-        title(hlegData, 'Experimental Data');
-          
-     ah2=axes('position',get(gca,'position'),'visible','off'); 
-        [hlegData2]=legend(ah2,[c2,c3,c], {'HbO', 'HbR', 'HbT'}, 'FontSize',14);
-        hlegData2.ItemTokenSize=[10 8];
-        hlegData2.Box='off';
-        hlegData2.Position(1:2)=[0.77 0.72];
-        title(hlegData2, 'Model Uncertanties');
         
      ah3=axes('position',get(gca,'position'),'visible','off'); 
         [hlegData3]=legend(ah3,[d4,c4], {'Validation data','Prediction'}, 'FontSize',14);
         hlegData3.ItemTokenSize=[10 8];
         hlegData3.Box='off';
-        hlegData3.Position(1:2)=[0.87 0.74];
-        title(hlegData3, 'Model Precition');
+        hlegData3.Position(1:2)=[0.48 0.025];
+        title(hlegData3, 'Model Prediction');
         
      ah4=axes('position',get(gca,'position'),'visible','off'); 
-        [hlegVasc]=legend(ah4,[NO3,NPY3,PGE3], {'NO vasoactive substance', 'NPY vasoactivesubstance', 'PGE2 vasoactive substance'}, 'FontSize',14);
+        [hlegVasc]=legend(ah4,[NO3,NPY3,PGE3], {'NO_{VSM}', 'NPY_{VSM}', 'PGE2_{VSM}'}, 'FontSize',14);
         hlegVasc.ItemTokenSize=[10 8];
         hlegVasc.Box='off';
-        hlegVasc.Position(1:2)=[0.77 0.17];
-        title(hlegVasc, 'Artery stimulation');
-    
+        hlegVasc.Position(1:2)=[0.77 0.11];
+        title(hlegVasc, {'Arteriole'...
+            'stimulation'});
+   

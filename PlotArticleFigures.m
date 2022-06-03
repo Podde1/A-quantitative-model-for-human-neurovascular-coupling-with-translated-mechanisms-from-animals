@@ -17,4 +17,4 @@ PlotFigure7;
 % plot model estimation figures from supplementary material
 fprintf('Supplementary material model estimation figures')
 PlotFigureS2;
-PlotUhlirovaS4; 
+PlotFigureS4; 

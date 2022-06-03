@@ -1,6 +1,6 @@
 Readme 
 
-OBS, the acronym DATASTUDY includes DREW/Uhlirova/Desjardins/Shmuel/Huber and will be used to avoid repeating descriptions 
+OBS, the acronym DATASTUDY includes DREW/Uhlirova/Desjardins/Shmuel/Huber data and will be used to avoid repeating descriptions 
 
 
 To execute the code, the following is required
@@ -10,6 +10,7 @@ To execute the code, the following is required
     - Symbolic Math Toolbox: https://www.mathworks.com/products/symbolic.html
 
 - Advanced Multilanguage Interface to CVODES and IDAS https://github.com/AMICI-dev/AMICI
+    under "tools" folder a slightly altered version is available, where some simulation issues are fixed
 
 - PESTO: Parameter EStimation TOolbox https://github.com/ICB-DCM/PESTO
 
@@ -28,7 +29,7 @@ PlotArticleFigures.m - plots all model estimation figures from the manusscript (
 
 OptDATASTUDY - ESS Optimization sctipt for each data set. 
 
-MCMCDATASTUDY - Rampart algorithm for each data set.
+MCMC_DATASTUDY - Rampart algorithm for each data set.
 
 Costfunctions/ - Model evaluation function for Chi2 to every data set.
 
@@ -36,8 +37,6 @@ Datamatrixes/ - Contain files with raw data from each study. Not froamted in the
 
 functions/ - functions used by various scripts. Needs to be on path.
 functions/optsetupfunction - loads best objectivefunction,  datastructure, simulation constants, end time for stimulation and parameters for each study by user input [1-Drew, 2-Uhlirova, 3-Desjardins, 4-Shmuel, 5-Huber, 6-DrewTimeVariant].
-
-functions_needed_for_plotting(AddToPath)/ - functions needed for plotting. Needs to be on path.
 
 GenerateData/ - functions that create data field structure (Data) containing the experimental data to each data set/study from the raw data in /Datamatrixes
 

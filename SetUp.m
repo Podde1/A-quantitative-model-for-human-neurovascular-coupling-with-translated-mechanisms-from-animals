@@ -7,11 +7,11 @@
 addpath(genpath('Costfunctions'))
 addpath(genpath('Datamatrixes'))
 addpath(genpath('functions'))
-addpath(genpath('Functions_needed_for_plotting_(AddToPath)'))
 addpath(genpath('GenerateData'))
 addpath(genpath('MCMC'))
 addpath('Model files (_syms)')
 addpath(genpath('OptimizedParameters'))
+% addpath(genpath('tools'))
 
 if not(isfolder('mex and sim files'))
     mkdir('mex and sim files')
@@ -39,13 +39,12 @@ try
         throw(MException('ME:mex', 'Microsoft Visual studio will not work as a mex-compiler, recomended mex-compiler Matlab add-on: MinGw-64 \n'));
     end
     
-    %% Check installation of AMICI 
-    pathStr = [pathsep, path, pathsep];
-    
-    if contains(pathStr,'AMICI')
+    %% Check installation of AMICI     
+    try
+        addpath(genpath('tools/AMICI-0.10.11_fix'))
         installAMICI; 
-    else
-        throw(MException('ME:tool', 'AMICI seems to be missing in the working directory, please add it (see README) \n'));
+    catch
+        warning('AMICI seems to be missing in the working directory, please add it (see README) \n');
     end
     
     %% Generate model files and Plot the artcile results
