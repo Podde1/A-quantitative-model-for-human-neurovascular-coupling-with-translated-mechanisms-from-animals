@@ -1,6 +1,7 @@
 %compile model files into callable mexfiles
 
 path = [pwd, '/mex and sim files/'];
+
 %% Steady state model
 amiwrap('SSmodel','SteadyStateModel_syms',path); % steady state model
 
@@ -42,7 +43,7 @@ amiwrap('HuberNeg','HuberNeg_syms',path);
 % replacing stimulation events, speeding up optimization
 amiwrap('Huber2','Huber2_syms',path);
 amiwrap('HuberNeg2','HuberNeg2_syms',path);
- 
+
 %% Generate model to describe the neural signalling behaviour of awake and anesthetized mice 
 amiwrap('Uhli_OGin','Uhli_OGin_syms',path);
 amiwrap('Uhli_OGex','Uhli_OGex_syms',path);

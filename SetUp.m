@@ -11,7 +11,6 @@ addpath(genpath('GenerateData'))
 addpath(genpath('MCMC'))
 addpath('Model files (_syms)')
 addpath(genpath('OptimizedParameters'))
-% addpath(genpath('tools'))
 
 if not(isfolder('mex and sim files'))
     mkdir('mex and sim files')
@@ -41,10 +40,15 @@ try
     
     %% Check installation of AMICI     
     try
-        addpath(genpath('tools/AMICI-0.10.11_fix'))
+        addpath(genpath('tools/AMICI-0.10.11-fix/matlab/'))
         installAMICI; 
-    catch
-        warning('AMICI seems to be missing in the working directory, please add it (see README) \n');
+    catch ME
+        switch ME.identifier
+            case 'ME:UndefinedFunction'
+                warning('AMICI seems to be missing in the working directory, please add it (see README) \n');
+            otherwise
+                disp(ME)
+        end
     end
     
     %% Generate model files and Plot the artcile results

@@ -10,7 +10,8 @@ To execute the code, the following is required
     - Symbolic Math Toolbox: https://www.mathworks.com/products/symbolic.html
 
 - Advanced Multilanguage Interface to CVODES and IDAS https://github.com/AMICI-dev/AMICI
-    under "tools" folder a slightly altered version is available, where some simulation issues are fixed
+    under "tools" folder a slightly altered version is available, where issues related to the compilation of events are fixed. 
+    The mex comilation of models can cause error is the directionary is to long, if that is the case, try moving the AMICI folder further up in the directionary tree. 
 
 - PESTO: Parameter EStimation TOolbox https://github.com/ICB-DCM/PESTO
 
