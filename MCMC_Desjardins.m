@@ -25,7 +25,7 @@ parameters.max = 4.5*ones(length(X),1);
 % signaling parameters
 parameters.max([3 4 5 6 7 8]) = 2.5;                      %KPF & KPINF. Neuronal interaction parameters
 parameters.max(6) = 3.5;
-parameters.min([23 36]) = -12;                            %Km saturation parameters, allowed to be small
+parameters.min([24 36]) = -12;                            %Km saturation parameters, allowed to be small
 parameters.min([9 10 11 12 13 14]) =log10(1/0.78);        %ksink for N and Ca2+
 parameters.max([1:2,37,38:40,41:43]) = 3;                 %k_u input scale parameters
 parameters.min(21) = 0;                                   %sinkNO

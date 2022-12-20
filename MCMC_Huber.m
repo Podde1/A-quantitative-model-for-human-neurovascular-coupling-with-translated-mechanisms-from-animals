@@ -9,7 +9,6 @@ addpath(genpath('Costfunctions'))
 addpath(genpath('Datamatrixes'))
 addpath(genpath('MCMC'))
 addpath('mex and sim files')
-addpath(genpath('../Toolboxs'))
    
 %% Load intial structures
 [~, Data, Constants, stimend, X] = optsetupfunction(5);

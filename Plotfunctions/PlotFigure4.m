@@ -42,7 +42,7 @@ options.rtol = 1e-12;
 %% Plotting of results
 
 % Setup of common variables
-ylab={'Vasoactive effect (A.U)'};
+ylab={'(\Delta%) Vasoactive effect (A.U)'};
 ylab_N={'Neuronal response (A.U)'};
 xlab={'Time (seconds)'};
 lw=1.5;

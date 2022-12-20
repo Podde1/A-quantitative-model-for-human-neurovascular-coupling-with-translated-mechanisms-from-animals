@@ -1,7 +1,15 @@
 %% MCMC sampling using the rampart algorithm in Pesto toolbox
 
 close all
-    
+
+addpath(genpath('functions'))
+addpath(genpath('OptimizedParameters'))
+addpath(genpath('GenerateData'))
+addpath(genpath('Costfunctions'))
+addpath(genpath('Datamatrixes'))
+addpath(genpath('MCMC'))
+addpath('mex and sim files')
+
 %% Data fetching    
 [~, Data, Constants, ~, X] = optsetupfunction(2);
 

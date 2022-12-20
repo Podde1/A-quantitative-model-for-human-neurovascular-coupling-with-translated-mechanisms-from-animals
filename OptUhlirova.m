@@ -1,4 +1,12 @@
 %% Optimization routine using essOPT
+% add nececery folders to path
+addpath(genpath('Functions'))
+addpath(genpath('GenerateData'))
+addpath(genpath('CostFunctions'))
+addpath(genpath('Datamatrixes'))
+addpath(genpath('OptimizedParameters'))
+addpath('mex and sim files')
+
 %% Generate DATA
 [objectiveFunction, Data, Constants, stimend, X] = optsetupfunction(2);
 

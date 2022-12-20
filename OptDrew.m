@@ -8,6 +8,7 @@ addpath(genpath('CostFunctions'))
 addpath(genpath('Datamatrixes'))
 addpath(genpath('OptimizedParameters'))
 addpath('mex and sim files')
+
 %% Script to perform an optimization using ESS-opt
 
 % Load inital data structures
