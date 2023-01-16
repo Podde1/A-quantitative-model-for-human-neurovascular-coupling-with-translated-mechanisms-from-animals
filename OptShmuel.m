@@ -68,11 +68,11 @@ opts.dim_refset   = 10;
 
 %% OPTIONS AUTOMATICALLY SET AS A RESULT OF PREVIOUS OPTIONS:
 if(strcmp(opts.local.solver,'fmincon'))
-    opts.local.use_gradient_for_finish = 1; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 1; %provide gradient to fmincon
 else
-    opts.local.use_gradient_for_finish = 0; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 0; %provide gradient to fmincon
 end
-opts.local.check_gradient_for_finish = 0; %DW: gradient checker
+opts.local.check_gradient_for_finish = 0; %gradient checker
 
 %% Solve
 warning('off','all') 
@@ -88,4 +88,4 @@ parameters_ess    = Results.xbest';
 % best parameter vector stored in X
 X=parameters_ess;
 
-w = warning ('on','all');
+w = warning ('on','all'); % error messages is enabled again

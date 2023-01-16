@@ -45,11 +45,11 @@ problem.vtr=-100; % Value to reach, can be useful in PL analysis if you are only
 opts.ndiverse   = 100;      %100; %500; %5; %
 opts.maxtime    =500;       % MAX-Time of optmization, i.e how long the optimization will last
 opts.maxeval    = 1e8;      % max number of evals, i.e cost function calls
-opts.log_var    = [];       %skip this
+opts.log_var    = []; 
 
 opts.local.solver = 'dhc';  %dhc'; %'fmincon'; %'nl2sol'; %'mix'; 
 opts.local.finish = opts.local.solver; %uses the local solver to check the best p-vector
-opts.local.bestx = 0;       %read the documentation, think it's best to leave at zero for now.
+opts.local.bestx = 0;       
 opts.local.balance = 0.5;   %how far from startguess the local search will push the params, 0.5 default
 opts.local.n1   = 2;        %Number of iterations before applying local search for the 1st time (Default 1)
 opts.local.n2   = 2;        %Minimum number of iterations in the global phase between 2 local calls (Default 10) 
@@ -64,11 +64,11 @@ opts.dim_refset   = 10;
 
 %% OPTIONS AUTOMATICALLY SET AS A RESULT OF PREVIOUS OPTIONS:
 if(strcmp(opts.local.solver,'fmincon'))
-    opts.local.use_gradient_for_finish = 1; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 1; %provide gradient to fmincon
 else
-    opts.local.use_gradient_for_finish = 0; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 0; %provide gradient to fmincon
 end
-opts.local.check_gradient_for_finish = 0; %DW: gradient checker
+opts.local.check_gradient_for_finish = 0; %gradient checker
 
 %% Solve
 warning('off','all') 
@@ -84,4 +84,4 @@ parameters_ess    = Results.xbest';
 % best parameter vector stored in X
 X=parameters_ess;
 
-w = warning ('on','all'); 
+w = warning ('on','all');  % error messages is enabled again

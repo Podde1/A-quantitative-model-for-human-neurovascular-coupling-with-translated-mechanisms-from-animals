@@ -52,12 +52,12 @@ opts.maxtime    =100;    % MAX-Time of optmization, i.e how long the optimizatio
 opts.maxeval    = 1e8;    % max number of evals, i.e cost function calls
 opts.log_var    = [];     %skip this
 
-opts.local.solver = 'dhc';%dhc'; %'fmincon'; %'nl2sol'; %'mix'; % local solver, fmincon works in my experience best
+opts.local.solver = 'dhc';  %dhc'; %'fmincon'; %'nl2sol'; %'mix'; % local solvers
 opts.local.finish = opts.local.solver; %uses the local solver to check the best p-vector
-opts.local.bestx = 0;       %read the documentation, think it's best to leave at zero for now.
+opts.local.bestx = 0;       
 opts.local.balance = 0.5;   %how far from startguess the local search will push the params, 0.5 default
 opts.local.n1   = 2;        %Number of iterations before applying local search for the 1st time (Default 1)
-opts.local.n2   = 2;       %Minimum number of iterations in the global phase between 2 local calls (Default 10) 
+opts.local.n2   = 2;        %Minimum number of iterations in the global phase between 2 local calls (Default 10) 
 
 problem.f       = 'meigoDummy'; % calls function that sets up the cost function call
 
@@ -65,19 +65,19 @@ problem.f       = 'meigoDummy'; % calls function that sets up the cost function 
 opts.local.iterprint = 1; % prints what going on during optimization
 
 %% MEIGO OPTIONS III (FOR ESS ONLY):
-opts.dim_refset   = 10; % leave to 'auto' for now <-- Revised standpoint, you can probably increase for problems with less (read NOT DESJARDINS) simulations.
+opts.dim_refset   = 10; 
 
 %% OPTIONS AUTOMATICALLY SET AS A RESULT OF PREVIOUS OPTIONS:
 if(strcmp(opts.local.solver,'fmincon'))
-    opts.local.use_gradient_for_finish = 1; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 1; %provide gradient to fmincon
 else
-    opts.local.use_gradient_for_finish = 0; %DW: provide gradient to fmincon
+    opts.local.use_gradient_for_finish = 0; %provide gradient to fmincon
 end
-opts.local.check_gradient_for_finish = 0; %DW: gradient checker
+opts.local.check_gradient_for_finish = 0; %gradient checker
 
 %% Solve
 warning('off','all') % AMICI prints error-messages for all simulations (if they fail) so this will fix that annoying orange text form appearing
-optim_algorithm = 'ess'; % 'multistart'; %  'cess'; % ESS IS BEST EVAH
+optim_algorithm = 'ess'; % 'multistart'; %  'cess';
 
 Results = MEIGO(problem,opts,optim_algorithm,objectiveFunction); % Run the optimization
 
@@ -89,4 +89,4 @@ parameters_ess    = Results.xbest';
 % best parameter vector stored in X
 X=parameters_ess;
 
-w = warning ('on','all'); % yay error messages again
+w = warning ('on','all'); % error messages is enabled again
