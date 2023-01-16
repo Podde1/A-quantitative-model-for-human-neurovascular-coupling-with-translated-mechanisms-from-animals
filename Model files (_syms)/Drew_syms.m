@@ -91,7 +91,7 @@ CO2_0 = CO2_max/(10^(log10(pO2_femart/p50)/(-1/h))+1);
 CO2_01 = CO2_0 - CO2_l;
 CO2_12 = nO2_1/V1;
 CO2_23 = nO2_2/V2;
-CO2_34 = nO2_3/V3ss;
+CO2_34 = nO2_3/V3;
 CO2_t = nO2_t/V_t;
 
 pO2_01 = p50*((CO2_max/CO2_01) -1)^(-1/h);
