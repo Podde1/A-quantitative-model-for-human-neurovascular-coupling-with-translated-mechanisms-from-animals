@@ -83,6 +83,12 @@ catch ME
             fprintf(ME.message)
             
         otherwise
-            error(ME.identifier,['An error was caught! \n', ['In ' ME.stack.name ' (line ' num2str(ME.stack.line) '): ' ME.message]]);
+            errormsg = sprintf('%s %s %s', string(ME.identifier), " - error was caught!", newline);
+            for index=1:length(ME.stack)
+                errormsg = sprintf('%s %s %s %s %s %s %s', errormsg, newline, string(ME.stack(index).name), " (line ", num2str(ME.stack(index).line), "): ", string(ME.message));
+            end
+            errorstruct.identifier = ME.identifier; 
+            errorstruct.message = errormsg; 
+            error(errorstruct);
     end
 end
