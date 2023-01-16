@@ -37,7 +37,7 @@ u = am_if(am_lt(t-floor(t),0.1),1,0);
 
 model.sym.xdot(1) = k_u1*u +kPF1*am_max(0,N_Pyr)-kIN*am_max(0,N_NPY) -sinkN_NO*N_NO;
 model.sym.xdot(2) = k_u2*u+kPF2*am_max(0,N_Pyr)-kIN2*am_max(0,N_NO) -sinkN_NPY*N_NPY;
-model.sym.xdot(3) = -kINF*N_NO-kINF*N_NPY-sinkN_Pyr*N_Pyr;
+model.sym.xdot(3) = -kINF*N_NO-kINF2*N_NPY-sinkN_Pyr*N_Pyr;
 
 %% Calcium dynamics
 model.sym.xdot(4) = kCa*(1+N_NO)-sinkCa_NO*Ca_NO;
