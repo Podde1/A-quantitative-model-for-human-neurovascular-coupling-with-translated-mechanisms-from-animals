@@ -1,8 +1,8 @@
-function [model] = SteadyStateModel_syms()
+function [model] = SSModel_syms()
 
-% set the parametrisation of the problem options are 'log', 'log10' and
+% set the parametrisation of the problem options are 'log', 'log10' and 'lin'
 
-model.param = 'log10';
+model.param = 'lin';
 
 %%
 % STATES
@@ -14,9 +14,9 @@ model.sym.x = [N_NO, N_NPY, N_Pyr, Ca_NO, Ca_NPY, Ca_Pyr, AA, PGE2, PGE2vsm, NO,
 % PARAMETERS ( for these sensitivities will be computed )
 
 % create parameter syms                                                                
-syms kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr sinkCa_NO sinkCa_NPY sinkCa_Pyr kPL kCOX kPGE2 sinkPGE2 kNOS kNO sinkNO kNPY Vmax Km sinkNPY ky1 ky2 ky3  K1 K2 K3 vis1 vis2 vis3 kscalemet Km2
+syms kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr sinkCa_NO sinkCa_NPY sinkCa_Pyr kPL kCOX kPGE2 sinkPGE2 kNOS kNO sinkNO kNPY Vmax Km sinkNPY ky1 ky2 ky3  K1 K2 K3 vis1 vis2 vis3 kscalemet Km2 ky4
 % create parameter vector 
-model.sym.p = [kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet, Km2];
+model.sym.p = [kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet, Km2, ky4];
 %%  
 % CONSTANTS ( for these no sensitivities will be computed )
 % this part is optional and can be ommited
@@ -65,8 +65,6 @@ model.sym.xdot(17) = 0;
 model.sym.xdot(18) = 0;
 model.sym.xdot(19) = 0;
 
-% CBF = (V1*(f0 + f1) + V2*(f1 + f2) + V3*(f2 + f3))/(2*(V1 + V2 + V3));
-
 %% Barret Hb and pressure (mM deafault unit??)
 CO2_max = 9.26;           
 V_t = 34.8;
@@ -113,7 +111,7 @@ HbR = HbRa + HbRc + HbRv;
 %% INITIAL CONDITIONS
 model.sym.x0(1:13) = 0;
 model.sym.x0(14:19) = [0.29; 0.44; 0.27; 1; 1; 1];
-model.sym.x0(20:23) = 1; %[2.1171; 2.7284; 1.471; 1.1381];
+model.sym.x0(20:23) = 1; 
 
 model.sym.dx0 = sym(zeros(size(model.sym.x)));
 

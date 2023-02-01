@@ -1,31 +1,31 @@
-function [model] = OGinhibitoryDesjardins_syms()
+function [model] = Model_syms()
 
-% set the parametrisation of the problem options are 'log', 'log10' and
+% set the parametrisation of the problem options are 'log', 'log10' and 'lin'
 
-model.param = 'log10';
+model.param = 'lin';
 
 %%
 % STATES
 % create state syms 
 syms N_NO N_NPY N_Pyr Ca_NO Ca_NPY Ca_Pyr AA PGE2 PGE2vsm NO NOvsm NPY NPYvsm V1 V2 V3 f1 f2 f3 nO2_1 nO2_2 nO2_3 nO2_t
-%% create state vector
-model.sym.x = [N_NO, N_NPY, N_Pyr, Ca_NO, Ca_NPY, Ca_Pyr, AA, PGE2, PGE2vsm, NO, NOvsm, NPY, NPYvsm, V1, V2, V3, f1, f2, f3, nO2_1, nO2_2, nO2_3, nO2_t];
+% create state vector
+model.sym.x = [N_NO, N_NPY, N_Pyr, Ca_NO, Ca_NPY, Ca_Pyr, AA, PGE2, PGE2vsm, NO, NOvsm, NPY, NPYvsm, V1, V2, V3, f1, f2, f3, nO2_1, nO2_2, nO2_3, nO2_t ];
 %%
 % PARAMETERS ( for these sensitivities will be computed )
 
 % create parameter syms                                                                
-syms k_u1 k_u2 kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr sinkCa_NO sinkCa_NPY sinkCa_Pyr kPL kCOX kPGE2 sinkPGE2 kNOS kNO sinkNO kNPY Vmax Km sinkNPY ky1 ky2 ky3 K1 K2 K3 vis1 vis2 vis3 kscalemet km2
+syms k_u1 k_u2 k_u3 kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr sinkCa_NO sinkCa_NPY sinkCa_Pyr kPL kCOX kPGE2 sinkPGE2 kNOS kNO sinkNO kNPY Vmax Km sinkNPY ky1 ky2 ky3 K1 K2 K3 vis1 vis2 vis3 kscalemet Km2 ky4
 
 % create parameter vector 
-model.sym.p = [k_u1, k_u2, kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet,km2];
+model.sym.p = [k_u1, k_u2, k_u3, kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet, Km2, ky4];
 %%  
 % CONSTANTS ( for these no sensitivities will be computed )
 % this part is optional and can be ommited
 
 % create parameter syms
-syms NOvsm0 PGE2vsm0 NPYvsm0 kCa tend g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart HbO_0 HbR_0 SaO2_0 ScO2_0 SvO2_0 TE B0
+syms NOvsm0 PGE2vsm0 NPYvsm0 kCa g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart HbO_0 HbR_0 SaO2_0 ScO2_0 SvO2_0 TE B0 p1 p2 p3 stim_onoff
 % create parameter vector 
-model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, tend, g_1, g_2, g_3 ,g_s , CMRO2_0, CO2_l, pO2_femart, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, g_1, g_2, g_3 ,g_s , CMRO2_0, CO2_l, pO2_femart, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0, p1, p2, p3, stim_onoff];
 
 %%
 % SYSTEM EQUATIONS
@@ -33,11 +33,12 @@ model.sym.k = [NOvsm0, PGE2vsm0, NPYvsm0, kCa, tend, g_1, g_2, g_3 ,g_s , CMRO2_
 syms t
 model.sym.xdot = sym(zeros(size(model.sym.x)));
 
-u = am_if(am_lt(t,tend),1,0)*am_if(am_lt(t-floor(t),0.1),1,0);
+u = stim_onoff;
 
-model.sym.xdot(1) = k_u1*u +kPF1*am_max(0,N_Pyr)-kIN*am_max(0,N_NPY) -sinkN_NO*N_NO;
-model.sym.xdot(2) = k_u2*u+kPF2*am_max(0,N_Pyr)-kIN2*am_max(0,N_NO) -sinkN_NPY*N_NPY;
-model.sym.xdot(3) = -kINF*N_NO-kINF2*N_NPY-sinkN_Pyr*N_Pyr;
+model.sym.xdot(1) = p1*k_u1*u +kPF1*am_max(0,N_Pyr) -kIN*am_max(0,N_NPY) -sinkN_NO*N_NO;
+model.sym.xdot(2) = p2*k_u2*u +kPF2*am_max(0,N_Pyr) -kIN2*am_max(0,N_NO) -sinkN_NPY*N_NPY;
+model.sym.xdot(3) = p3*k_u3*u -kINF*N_NO -kINF2*N_NPY -sinkN_Pyr*N_Pyr;
+
 
 %% Calcium dynamics
 model.sym.xdot(4) = kCa*(1+N_NO)-sinkCa_NO*Ca_NO;
@@ -45,8 +46,8 @@ model.sym.xdot(5) = kCa*(1+N_NPY)-sinkCa_NPY*Ca_NPY;
 model.sym.xdot(6) = kCa*(1+N_Pyr)-sinkCa_Pyr*Ca_Pyr;
 
 %% Pyramidal intracellular signaling AA->PGE2
-model.sym.xdot(7) = kPL*Ca_Pyr-kCOX*AA/(km2+AA);
-model.sym.xdot(8) = kCOX*AA/(km2+AA)-kPGE2*PGE2;
+model.sym.xdot(7) = kPL*Ca_Pyr-kCOX*AA/(Km2+AA);
+model.sym.xdot(8) = kCOX*AA/(Km2+AA)-kPGE2*PGE2;
 model.sym.xdot(9) = kPGE2*PGE2-sinkPGE2*PGE2vsm;
 
 %% GABAergic NO signaling
@@ -57,7 +58,7 @@ model.sym.xdot(11) = kNO*NO-sinkNO*NOvsm;
 model.sym.xdot(12) = kNPY*Ca_NPY-Vmax*NPY/(Km+NPY);
 model.sym.xdot(13) = Vmax*NPY/(Km+NPY)-sinkNPY*NPYvsm;
 
-Artdia = ky1*(NOvsm-NOvsm0) +ky2*(PGE2vsm-PGE2vsm0) -ky3*(NPYvsm-NPYvsm0); %p26, 27, 28
+Artdia = ky1*(NOvsm-NOvsm0) +ky2*(PGE2vsm-PGE2vsm0) -ky3*(NPYvsm-NPYvsm0);
 
 %% circuit
 syms C1 C2 C3 f0 R1 R2 R3
@@ -128,7 +129,7 @@ HbOv = V3*SvO2;     HbRv = V3*(1-SvO2);
 HbO = HbOa + HbOc + HbOv;
 HbR = HbRa + HbRc + HbRv;
 
-%% BOLD Buxton
+%% BOLD Buxton  
 VI = 0.05;
 Va0 = V1ss*VI;      Vc0 = V2ss*VI;      Vv0 = V3ss*VI;
 Va = V1*VI;         Vc = V2*VI;         Vv = V3*VI;
@@ -141,6 +142,7 @@ gamma=2.68*10^8;    Cav=302.06*Hct + 41.83;     Cc=302.06*Hct_c + 41.83;
 R2e0=25.1; R2a0=Aav+Cav*((1-SaO2_0).^2); R2c0=Ac+Cc*((1-ScO2_0).^2); R2v0=Aav+Cav*((1-SvO2_0).^2);
 lambda=1.15; Se0=exp(-TE*R2e0); Sa0=exp(-TE*R2a0); Sc0=exp(-TE*R2c0); Sv0=exp(-TE*R2v0);
 epsA=lambda*(Sa0/Se0); epsC=lambda*(Sc0/Se0); epsV=lambda*(Sv0/Se0);
+%epsA=1.3;           epsC=1.02;          epsV=0.5;
 preAV=4*pi*Hct*deltaChi*gamma*B0/3;     preC=0.04*((deltaChi*Hct_c*gamma*B0).^2);
 
 % saturation for equal tissue–blood susceptibility
@@ -172,20 +174,19 @@ H=((1 - VI) + epsA*Va0 + epsC*Vc0 + epsV*Vv0);
     model.sym.M= matris;
 
 %% output simplifications
-% OutArtdia = (4*V1/(pi*L1))^(1/2);
-% ssOutArtdia = (4*V1ss/(pi*L1))^(1/2);
 
-% OutCapdia = (4*V2/(pi*L2))^(1/2);
-% ssOutCapdia = (4*V2ss/(pi*L2))^(1/2);
+OutArtdia=(V1/L1).^(1/2);
+ssOutArtdia =(V1ss/L1).^(1/2);
 
-% OutVendia = (4*V3/(pi*L3))^(1/2);
-% ssOutVendia = (4*V3ss/(pi*L3))^(1/2);
+OutVendia=(V3/L3).^(1/2);
+ssOutVendia =(V3ss/L3).^(1/2);
 
-% CBV = V1 + V2 + V3;
-%  CBF = (V1*(f0 + f1) + V2*(f1 + f2) + V3*(f2 + f3))/(2*(V1 + V2 + V3));
+CBV = V1 + V2 + V3;
+CBF = (V1*(f0 + f1) + V2*(f1 + f2) + V3*(f2 + f3))/(2*(V1 + V2 + V3));
 
-% BOLDfractional = (1/H)*(Se+Sa+Sc+Sv);
-% BOLDpercentage = 100*((1/H)*(Se+Sa+Sc+Sv)-1);
+BOLDfractional = (1/H)*(Se+Sa+Sc+Sv);
+BOLDpercent = 100*((1/H)*(Se+Sa+Sc+Sv)-1);
+
 HbTout = ((V1-V1ss) + (V2-V2ss) + (V3-V3ss))*100; 
 HbOout = (HbO - HbO_0)*100;                   
 HbRout = (HbR - HbR_0)*100;                   
@@ -199,8 +200,17 @@ model.sym.x0(20:23) = 1;
 model.sym.dx0 = sym(zeros(size(model.sym.x)));
 
 % OBSERVALES
- model.sym.y = sym(zeros(3,1)); 
-model.sym.y(1) = HbTout;
-model.sym.y(2) = HbOout;
-model.sym.y(3) = HbRout;
+model.sym.y = sym(zeros(12,1));
+model.sym.y(1)=100*(OutArtdia - ssOutArtdia)/ssOutArtdia;
+model.sym.y(2)=100*(OutVendia - ssOutVendia)/ssOutVendia;
+model.sym.y(3)=HbTout;
+model.sym.y(4)=HbOout;
+model.sym.y(5)=HbRout;
+model.sym.y(6)=BOLDpercent;
+model.sym.y(7)=BOLDfractional;
+model.sym.y(8)=ky4*N_Pyr;
+model.sym.y(9)=100*(CBV-1);
+model.sym.y(10)=100*((V1-V1ss)/V1ss + 0.5*(V2-V2ss)/V2ss);
+model.sym.y(11)=100*((V3-V3ss)/V3ss + 0.5*(V2-V2ss)/V2ss);
+model.sym.y(12)=CBF;
 end
