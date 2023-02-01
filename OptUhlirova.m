@@ -12,14 +12,15 @@ addpath('mex and sim files')
 
 startGuess = X;
 %% Setting up parameter bounds
-lb = -3.52*ones(size(startGuess));
-ub = 3*ones(size(startGuess));
+lb = -4*ones(size(startGuess));
+ub = 4*ones(size(startGuess));
 
-ub([4 5 6 7 8 9 35 36 37 38 39 40])=1;
+ub([4 5 6 7 8 9 38 39 40])=2.5;
 lb(25)=-6;
-lb([10 11 12 13 14 15 41 42 43])=log10(1/0.78); 
-ub([1 2 3 30 31 32 33 34 44 45 46])=2; 
+lb([10 11 12 13 14 15])=log10(1/0.78); 
+ub([1 2 3 44 5 51 52 53 54])=2.5; 
 lb(22)=0;
+lb([25 37]) = -12;
 
 problem.x_L = lb;
 problem.x_U = ub; 

@@ -22,7 +22,7 @@ lb = -4.5*ones(size(startGuess));
 ub =4.5*ones(size(startGuess));
 
 ub([4 5 6 7 8 9]) = 3;                       %KPF & KPINF
-lb([25 37]) = -12;                           %km borde få va liten
+lb([25 37]) = -12;                           %km is allowed to be small
 lb([10 11 12 13 14 15]) = log10(1/0.78);     %ksink 	    
 ub(1:3) = 2.5;  
 lb(22) = 0;                                  %sinkNO
