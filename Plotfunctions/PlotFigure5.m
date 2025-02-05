@@ -378,7 +378,7 @@ figure('Name', 'Figure 5_plots')
     % steady state simulation
     options.atol = 1e-9;
     options.rtol = 1e-16;
-    sol = simulate_SSmodel(inf,theta(3:36),[Ca_start,Con],[],options);
+    sol = simulate_SSModel(inf,pOGin(4:38),[Ca_start,Con],[],options);
 
     % assaign values to constants and intitaial conditions in the stimulation simulation
     HbO_0 = sol.y(2);

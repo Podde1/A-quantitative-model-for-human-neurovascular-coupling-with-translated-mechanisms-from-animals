@@ -71,7 +71,7 @@ for i=1:iter
 
     %% SS simulation
 
-    sol = simulate_SSmodel_2(inf,theta(4:37),[Ca_start,Con],[],options);
+    sol = simulate_SSModel_2(inf,theta(4:37),[Ca_start,Con],[],options);
 
     % assaign values to constants in the stimulation simulation
     HbO_0 = sol.y(2);

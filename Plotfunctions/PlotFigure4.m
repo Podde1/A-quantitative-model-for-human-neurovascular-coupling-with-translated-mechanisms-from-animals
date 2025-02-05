@@ -9,7 +9,7 @@ options.sensi = 0;
 Ca_start = 10;
 
 % steady state simulation
-sol = simulate_SSmodel(inf,theta(4:end),[Ca_start,Con],[],options);
+sol = simulate_SSModel(inf,theta(4:end),[Ca_start,Con],[],options);
 
 % assaign values to constants in the stimulation simulation
 ssArt = sol.y(1);
