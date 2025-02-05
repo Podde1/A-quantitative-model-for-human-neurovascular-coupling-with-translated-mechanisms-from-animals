@@ -30,7 +30,7 @@ function [f] = Cost_Uhlirova(theta,Data,Con,FID)
     %% steady state simulation
     sol = simulate_SSModel(inf,pOGinAnes(4:38),[Ca_start,Con],[],optionsSS);
 
-    % Assign values to constants and intitaial conditions taken from the SS simulation
+    % Assign values to constants and initial conditions taken from the SS simulation
     HbO_0 = sol.y(2);
     HbR_0 = sol.y(3);
     SaO2_0 = sol.y(4);
@@ -52,7 +52,7 @@ function [f] = Cost_Uhlirova(theta,Data,Con,FID)
     optionsLong=optionsSS; % For the longer paradigm, we allow for more integration steps
 
     %% Simulations
-    % anesthetized OGexcitatory
+    % anaesthetized OGexcitatory
     Constants(end) = 0;
     t1 = 0:0.1:0.9;
     simOGex1 = simulate_Model(t1,pOGexAnes,Constants, [], optionsLong);
@@ -77,7 +77,7 @@ function [f] = Cost_Uhlirova(theta,Data,Con,FID)
         throw(MException('error'))
     end
     
-    % anesthetized OGinhibitory
+    % anaesthetized OGinhibitory
     optionsLong = optionsSS;
     Constants(end) = 0;
     t1 = 0:0.05:0.55;
@@ -103,7 +103,7 @@ function [f] = Cost_Uhlirova(theta,Data,Con,FID)
         throw(MException('error'))
     end
     
-    % anesthetized sensory
+    % anaesthetized sensory
     optionsLong = optionsSS;
     Constants(end) = 1;
     t1 = 0:0.1:2;

@@ -1,4 +1,4 @@
-%% Ploting script that generates figure 5 from the article
+%% Plotting script that generates figure 5 from the article
 load('GenerateData\GeneratedModelUncertainties\DesjardinsStructs.mat')
 Data = DesjardinsData;
 Res = DesjardinsSimulation;
@@ -85,7 +85,7 @@ figure('Name', 'Figure 5_plots')
 
         ylabel(ax_y,ylab,'FontSize',FontSize)
 
-        %% Add overaching title
+        %% Add overarching title
         Htitle1 = title({'\fontsize{14} OG inhibitory'...
             '\fontsize{12} 0.1s stimulation'},'interpreter','tex');
         Htitle1.Visible = 'on';

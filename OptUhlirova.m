@@ -1,5 +1,5 @@
 %% Optimization routine using essOPT
-% add nececery folders to path
+% add necessary folders to path
 addpath(genpath('Functions'))
 addpath(genpath('GenerateData'))
 addpath(genpath('CostFunctions'))

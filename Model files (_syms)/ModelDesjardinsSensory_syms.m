@@ -3,7 +3,7 @@ function [model] = ModelDesjardinsSensory_syms()
 %%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Could be replaced with an nested for loop in Cost_Desjardins (like the
 %%% implementation for OGinhibitatory/OGexcitatory 20 sec stim duration. 
-%%% However, it is convinient to do it within this model file instead. 
+%%% However, it is convenient to do it within this model file instead. 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 % set the parametrisation of the problem options are 'log', 'log10' and 'lin'
@@ -26,7 +26,7 @@ syms k_u1 k_u2 k_u3 kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr s
 model.sym.p = [k_u1, k_u2, k_u3, kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet, Km2, ky4];
 %%  
 % CONSTANTS ( for these no sensitivities will be computed )
-% this part is optional and can be ommited
+% this part is optional and can be omitted
 
 % create parameter syms
 syms NOvsm0 PGE2vsm0 NPYvsm0 kCa g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart HbO_0 HbR_0 SaO2_0 ScO2_0 SvO2_0 TE B0 p1 p2 p3 stim_onoff
@@ -151,7 +151,7 @@ epsA=lambda*(Sa0/Se0); epsC=lambda*(Sc0/Se0); epsV=lambda*(Sv0/Se0);
 %epsA=1.3;           epsC=1.02;          epsV=0.5;
 preAV=4*pi*Hct*deltaChi*gamma*B0/3;     preC=0.04*((deltaChi*Hct_c*gamma*B0).^2);
 
-% saturation for equal tissue–blood susceptibility
+% saturation for equal tissueï¿½blood susceptibility
 Yoff=0.95;
 
 %Vascular

@@ -25,7 +25,7 @@ function [simulationOutput] = SimulateShmuelAll(theta, Con, stimend,Data,cutOff)
     % steady state simulation
     sol = simulate_SSModel(inf,thetapos(4:38),[Ca_start,Con],[],options);
 
-    % assaign values to constants in the stimulation simulation
+    % assign values to constants in the stimulation simulation
     options.x0 = sol.x(end,:).';
     p1 = 1; 
     p2 = 1; 

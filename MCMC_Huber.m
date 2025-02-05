@@ -10,7 +10,7 @@ addpath(genpath('Datamatrixes'))
 addpath(genpath('MCMC'))
 addpath('mex and sim files')
    
-%% Load intial structures
+%% Load initial structures
 [~, Data, Constants, stimend, X] = optsetupfunction(5);
 
 %% Initial setup
@@ -21,7 +21,7 @@ end
 parameters.min = -4.5*ones(length(X),1);
 parameters.max = 4.5*ones(length(X),1);
 
-% signaling parameters
+% signalling parameters
 parameters.max([1:3,38:40,43:45,52:54]) = 3;             %k_u input scale parameters
 parameters.max([4:9, 46:51]) = 2.5;                      %KPF & KPINF. Neuronal interaction parameters
 parameters.max([48 49]) = 3.5;  
@@ -56,7 +56,7 @@ optionsPesto = PestoOptions(); % loads optimization options and options for ever
 
 optionsPesto.obj_type = 'negative log-posterior';  
 optionsPesto.n_starts = 1; 
-optionsPesto.mode = 'visual'; % it will plot the results itteratively. 
+optionsPesto.mode = 'visual'; % it will plot the results iteratively. 
 
 optionsPesto.comp_type = 'sequential'; 
 
@@ -98,7 +98,7 @@ optionsPesto.MCMC.mode = optionsPesto.mode;
       optionsPesto.MCMC.RAMPART.RPOpt.dimensionsToPlot     = [1,2];
       optionsPesto.MCMC.RAMPART.RPOpt.isInformative        = [1,1,ones(1,optionsPesto.MCMC.RAMPART.RPOpt.nDim-2)];
       
-%% set intital parameters and sigma structures
+%% set initial parameters and sigma structures
 optionsPesto.MCMC.theta0 = X;
 optionsPesto.MCMC.sigma0 = 1e5 * eye(length(X));
 

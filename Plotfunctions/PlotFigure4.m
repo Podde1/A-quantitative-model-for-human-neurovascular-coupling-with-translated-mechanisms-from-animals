@@ -1,4 +1,4 @@
-%% Ploting script that generates the curves from figure 4 in the article
+%% Plotting script that generates the curves from figure 4 in the article
 [~, Data, Con, stimend, theta] = optsetupfunction(1);
 
 options = amioption('sensi',0,...
@@ -11,7 +11,7 @@ Ca_start = 10;
 % steady state simulation
 sol = simulate_SSModel(inf,theta(4:end),[Ca_start,Con],[],options);
 
-% assaign values to constants in the stimulation simulation
+% assign values to constants in the stimulation simulation
 ssArt = sol.y(1);
 HbO_0 = sol.y(2);
 HbR_0 = sol.y(3);
@@ -61,7 +61,7 @@ titleY=0;
 sizebar=0.02;
 
 
-%% Calulcation of Delta effect of the vasoactive arms
+%% Calculation of Delta effect of the vasoactive arms
 PGE2_1=10.^(theta(28)).*(solReal.x(:,9)-solReal.x(1,9));
 NPY_1=10.^(theta(29)).*(solReal.x(:,13)-solReal.x(1,13));
 NO_1=10.^(theta(27)).*(solReal.x(:,11)-solReal.x(1,11));

@@ -26,7 +26,7 @@ try
     % steady state simulation
     sol = simulate_SSModel(inf,theta(4:end),[Ca_start,Con],[],options);
 
-    % assaign values to constants in the stimulation simulation
+    % assign values to constants in the stimulation simulation
     HbO_0 = sol.y(2);
     HbR_0 = sol.y(3);
     SaO2_0 = sol.y(4);

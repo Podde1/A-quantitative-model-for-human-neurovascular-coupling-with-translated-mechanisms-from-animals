@@ -1,4 +1,4 @@
-%% Ploting script that generates figure 3 from the article
+%% Plotting script that generates figure 3 from the article
 load('GenerateData\GeneratedModelUncertainties\DrewStructs.mat')
 Res = DrewSimulation;
 
@@ -126,7 +126,7 @@ figure('Name', 'Figure 3')
         titlepos=pos(1);
         set(Htitle,'Position',[titlepos titleY]);  
 
-        %% Add overaching title
+        %% Add overarching title
         [~,h3_1]=suplabel('0.125 s stimulation'  ,'t');
         h3_1.FontSize=14;
         h3_1.Position(2)=h3_1.Position(2)-0.0;       
@@ -286,7 +286,7 @@ figure('Name', 'Figure 3')
         titlepos=pos(1);
         set(Htitle,'Position',[titlepos titleY]);
 
-        %% Add overaching title
+        %% Add overarching title
         [~,h3_2]=suplabel('10 s stimulation'  ,'t');
         h3_2.FontSize=14;
         h3_2.Position(1)=h3_2.Position(1);

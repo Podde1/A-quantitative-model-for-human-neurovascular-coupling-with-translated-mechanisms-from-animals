@@ -23,7 +23,7 @@ function [f,c] = Cost_Shmuel(theta,Data,Con,stimend,FID)
 
     sol = simulate_SSModel(inf,thetapos(4:38),[Ca_start,Con],[],options);
 
-    % assaign values to constants in the stimulation simulation
+    % assign values to constants in the stimulation simulation
     options.x0 = sol.x(end,:).';
     p1 = 1; 
     p2 = 1; 
@@ -91,7 +91,7 @@ function [f,c] = Cost_Shmuel(theta,Data,Con,stimend,FID)
     NPYVSM = thetapos(29)*(simPos.x(2:2:end-1,13)-simPos.x(1,13));
 
     straff1 = 1e2*sum(NPYVSM(2:35) < 0);
-    straff2 = 1e2*sum(NPYVSM(30:end) < abs(PGEVSM(30:end)));    %force NPY to contributate   
+    straff2 = 1e2*sum(NPYVSM(30:end) < abs(PGEVSM(30:end)));    %force NPY to contribute   
     straff3 = 1e2*sum(NOVSM(5:12) > -0.1.*abs(PGEVSM(5:12)));
     straff4 = 1e2*sum(NPYVSM(5:20) > PGEVSM(5:20));
 

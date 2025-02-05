@@ -1,4 +1,4 @@
-%% function to solve the intial values needed for the simulation of the circuit
+%% function to solve the initial values needed for the simulation of the circuit
 function [g_1, g_2, g_3, g_s, CMRO2_0, CO2_l] = BarretPO2constants(pO2_01,pO2_12,pO2_23,pO2_34,PO2_t,pO2_femart)
 
 % constants

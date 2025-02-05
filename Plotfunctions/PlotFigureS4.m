@@ -1,4 +1,4 @@
-%% Ploting script that generates figure S4 from the article
+%% Pltoting script that generates figure S4 from the article
 load('GenerateData\GeneratedModelUncertainties\UhlirovaStructs')
 D = Data;
 %% Initial setup of common stuff

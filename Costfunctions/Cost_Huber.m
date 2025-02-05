@@ -176,8 +176,8 @@ function [f,c,gf,gc] = Cost_Huber(theta,Data,Con,tend,FID)
     NPYVSM1 = thetapos(29)*(SimPos.x(:,13)-SimPos.x(1,13));
 
     straff11 = 1e2*sum(NPYVSM1(2:35) < 0);
-    straff12 = 0e1*sum(NOVSM1(2) < PGEVSM1(2));                     %force NO to contributate
-    straff13 = 1e2*sum(NPYVSM1(30:end-2) < abs(PGEVSM1(30:end-2))); %force NPY to contributate   
+    straff12 = 0e1*sum(NOVSM1(2) < PGEVSM1(2));                     %force NO to contribute
+    straff13 = 1e2*sum(NPYVSM1(30:end-2) < abs(PGEVSM1(30:end-2))); %force NPY to contribute   
     straff14 = 1e2*sum(NOVSM1(5:12) > -0.1.*abs(PGEVSM1(5:12)));
     straff15 = 1e2*sum(NPYVSM1(5:20) > PGEVSM1(5:20));
 
@@ -189,8 +189,8 @@ function [f,c,gf,gc] = Cost_Huber(theta,Data,Con,tend,FID)
     NPYVSM3 = theta2(29)*(SimExc.x(:,13)-SimExc.x(1,13));
 
     straff31 = 1e2*sum(NPYVSM3(2:35) < 0);
-    straff32 = 0e1*sum(NOVSM3(2) < PGEVSM3(2));                     %force NO to contributate
-    straff33 = 1e2*sum(NPYVSM3(30:end-2) < abs(PGEVSM3(30:end-2))); %force NPY to contributate   
+    straff32 = 0e1*sum(NOVSM3(2) < PGEVSM3(2));                     %force NO to contribute
+    straff33 = 1e2*sum(NPYVSM3(30:end-2) < abs(PGEVSM3(30:end-2))); %force NPY to contribute   
     straff34 = 1e2*sum(NOVSM3(5:12) > -0.1.*abs(PGEVSM3(5:12)));
     straff35 = 1e2*sum(NPYVSM3(5:20) > PGEVSM3(5:20));
 

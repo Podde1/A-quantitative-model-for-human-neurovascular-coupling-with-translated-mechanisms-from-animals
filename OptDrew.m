@@ -1,7 +1,7 @@
 %% eSS Optimization
 close all
 
-% add nececery folders to path
+% add necessary folders to path
 addpath(genpath('Functions'))
 addpath(genpath('GenerateData'))
 addpath(genpath('CostFunctions'))
@@ -11,7 +11,7 @@ addpath('mex and sim files')
 
 %% Script to perform an optimization using ESS-opt
 
-% Load inital data structures
+% Load initial data structures
 [objectiveFunction, Data, Constants, stimend, X] = optsetupfunction(1);
 
 startGuess=X;
@@ -38,7 +38,7 @@ problem.x_U       = ub;
 problem.vtr=-100;
 %% MEIGO OPTIONS I (COMMON TO ALL SOLVERS):
 opts.ndiverse   =100;       %100; %500; %5; %
-opts.maxtime    = 200;      % MAX-Time of optmization, i.e how long the optimization will last
+opts.maxtime    = 200;      % MAX-Time of optimization, i.e how long the optimization will last
 opts.maxeval    = 1e8;      % max number of evals, i.e cost function calls
 opts.log_var    = [];    
 

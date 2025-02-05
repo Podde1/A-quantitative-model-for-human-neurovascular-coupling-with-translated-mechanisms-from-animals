@@ -52,7 +52,7 @@ function [simulationOutput] = SimulateHuberAll(theta, Con, tend,Data,cutOff)
 
     % steady state simulation
     sol = simulate_SSModel(inf,thetapos(4:38),[Ca_start,Con],[],optionsSS);
-    % assaign values to constants in the stimulation simulation
+    % assign values to constants in the stimulation simulation
 
     optionsSS.x0 = sol.x(end,:).';
 

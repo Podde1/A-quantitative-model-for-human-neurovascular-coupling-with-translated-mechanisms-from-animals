@@ -28,7 +28,7 @@ function [f,c,gf,gc] = Cost_Desjardins(theta,Data,Con,tend, FID)
     options.rtol = 1e-16;
     sol = simulate_SSModel(inf,pOGin(4:38),[Ca_start,Con],[],options);
 
-    % assaign values to constants and intitaial conditions in the stimulation simulation
+    % assaign values to constants and initial conditions in the stimulation simulation
     HbO_0 = sol.y(2);
     HbR_0 = sol.y(3);
     SaO2_0 = sol.y(4);
@@ -208,7 +208,7 @@ function [f,c,gf,gc] = Cost_Desjardins(theta,Data,Con,tend, FID)
         %% Behaviour demands Sensory 
         NOVSM = pSensLong(27)*(Sens20x(:,1)-Sens20x(1,1));
         PGEVSM = pSensLong(28)*(Sens20x(:,2)-Sens20x(1,2));
-        Sensplateu = 5e0*sum(NOVSM(4:11) > PGEVSM(4:11));     %the plateu (second peak) should be from PGE2        
+        Sensplateu = 5e0*sum(NOVSM(4:11) > PGEVSM(4:11));     %the plateau (second peak) should be from PGE2        
         Senspeak = 5e0*sum(NOVSM(1:2) < PGEVSM(1:2));         %first peak should be from NO 
 
         straffSens = Senspeak + Sensplateu;

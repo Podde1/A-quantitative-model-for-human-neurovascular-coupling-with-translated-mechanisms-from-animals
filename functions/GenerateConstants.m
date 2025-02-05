@@ -1,4 +1,4 @@
-%% Constatants needed for the circuit part of the model
+%% Constants needed for the circuit part of the model
 function [Constants] = GenerateConstants()
 
 pO2_01 = 81.2;      pO2_12 = 59.7;      pO2_23 = 39.6;      pO2_34 = 41.3;

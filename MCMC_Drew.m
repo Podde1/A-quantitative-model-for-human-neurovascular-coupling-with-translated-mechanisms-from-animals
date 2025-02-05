@@ -10,7 +10,7 @@ addpath(genpath('Datamatrixes'))
 addpath(genpath('MCMC'))
 addpath('mex and sim files')
    
-%% Load intial structures
+%% Load initial structures
 [~, Data, Constants, stimend, X] = optsetupfunction(1);
 
 %% Initial setup
@@ -22,9 +22,9 @@ end
 parameters.min = -4.5*ones(length(X),1);
 parameters.max = 4.5*ones(length(X),1);
 
-% signaling parameters
+% signalling parameters
 ub([4 5 6 7 8 9]) = 3;                       %KPF & KPINF
-lb([25 37]) = -12;                           %km borde få va liten
+lb([25 37]) = -12;                           %km is allowed to be small
 lb([10 11 12 13 14 15]) = log10(1/0.78);     %ksink 	    
 ub(1:3) = 2.5;  
 lb(22) = 0;                                  %sinkNO
@@ -93,7 +93,7 @@ optionsPesto.MCMC.mode = optionsPesto.mode;
       optionsPesto.MCMC.RAMPART.RPOpt.dimensionsToPlot     = [1,2];
       optionsPesto.MCMC.RAMPART.RPOpt.isInformative        = [1,1,ones(1,optionsPesto.MCMC.RAMPART.RPOpt.nDim-2)];
       
-%% set intial parameters and sigma structure
+%% set initial parameters and sigma structure
 optionsPesto.MCMC.theta0 = X;
 optionsPesto.MCMC.sigma0 = 1e5 * eye(length(X));
 

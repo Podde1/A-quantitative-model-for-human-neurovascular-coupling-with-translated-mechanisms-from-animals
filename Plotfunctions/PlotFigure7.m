@@ -1,4 +1,4 @@
-%% Ploting script that generates figure 7 from the article
+%% Plotting script that generates figure 7 from the article
 
 load('GenerateData\GeneratedModelUncertainties\HuberStructs.mat')
 Data = HuberData;

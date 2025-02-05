@@ -16,7 +16,7 @@ startTime=0;
  
   h = waitbar(0,'Please wait...');
 
- %% Setup matrixes for saving simulations
+ %% Setup matrices for saving simulations
  
  %% Uncertainty of estimations
 M_solOGex=zeros(iter,size(startTime:simScale:Data(1).t(end),2));

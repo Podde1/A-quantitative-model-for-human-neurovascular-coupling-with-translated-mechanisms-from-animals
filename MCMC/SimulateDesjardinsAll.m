@@ -19,7 +19,7 @@ function [simulationOutput] = SimulateDesjardinsAll(theta,Con,tend,Data, cutOFF)
     options.sensi = 0;
     options.nmaxevent=1e4;
     
-    % inital value of Calcium
+    % instal value of Calcium
     Ca_start = 10;
 
     % steady state simulation
@@ -27,7 +27,7 @@ function [simulationOutput] = SimulateDesjardinsAll(theta,Con,tend,Data, cutOFF)
     options.rtol = 1e-16;
     sol = simulate_SSModel(inf,pOGin(4:38),[Ca_start,Con],[],options);
 
-    % assaign values to constants and intitaial conditions in the stimulation simulation
+    % assign values to constants and initial conditions in the stimulation simulation
     HbO_0 = sol.y(2);
     HbR_0 = sol.y(3);
     SaO2_0 = sol.y(4);

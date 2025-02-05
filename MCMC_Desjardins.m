@@ -11,7 +11,7 @@ addpath(genpath('MCMC'))
 addpath('mex and sim files')
 addpath(genpath('../Toolboxs'))
    
-%% Load intial structures
+%% Load initial structures
 [~, DesjardinsData, Constants, stimend, X] = optsetupfunction(3);
 
 %% Initial setup
@@ -22,7 +22,7 @@ end
 parameters.min = -4.5*ones(length(X),1);
 parameters.max = 4.5*ones(length(X),1);
 
-% signaling parameters
+% signalling parameters
 parameters.max([3 4 5 6 7 8]) = 2.5;                      %KPF & KPINF. Neuronal interaction parameters
 parameters.max(6) = 3.5;
 parameters.min([24 36]) = -12;                            %Km saturation parameters, allowed to be small
@@ -96,7 +96,7 @@ optionsPesto.MCMC.mode = optionsPesto.mode;
       optionsPesto.MCMC.RAMPART.RPOpt.dimensionsToPlot     = [1,2];
       optionsPesto.MCMC.RAMPART.RPOpt.isInformative        = [1,1,ones(1,optionsPesto.MCMC.RAMPART.RPOpt.nDim-2)];
 
-%% set inital parameters and sigma structure
+%% set initial parameters and sigma structure
 optionsPesto.MCMC.theta0 = X;
 optionsPesto.MCMC.sigma0 = 1e5 * eye(length(X));
 

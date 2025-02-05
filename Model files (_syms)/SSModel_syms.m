@@ -19,7 +19,7 @@ syms kPF1 kPF2 kIN kIN2 kINF kINF2 sinkN_NO sinkN_NPY sinkN_Pyr sinkCa_NO sinkCa
 model.sym.p = [kPF1, kPF2, kIN, kIN2, kINF, kINF2, sinkN_NO, sinkN_NPY, sinkN_Pyr, sinkCa_NO, sinkCa_NPY, sinkCa_Pyr, kPL, kCOX, kPGE2, sinkPGE2, kNOS, kNO, sinkNO, kNPY, Vmax, Km, sinkNPY, ky1, ky2, ky3, K1, K2, K3, vis1, vis2, vis3, kscalemet, Km2, ky4];
 %%  
 % CONSTANTS ( for these no sensitivities will be computed )
-% this part is optional and can be ommited
+% this part is optional and can be omitted
 
 % create parameter syms
 syms kCa g_1 g_2 g_3 g_s CMRO2_0 CO2_l pO2_femart

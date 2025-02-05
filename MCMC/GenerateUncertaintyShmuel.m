@@ -15,10 +15,10 @@ SPparams = table2array(alldata(:,2:53));
 bestParams = gather(SPparams(minIndex,:));
 bestSimulatedOutPut = SimulateShmuelAll(bestParams, Constants, stimend, ShmuelData,cutoff);
 
-%% Filter to the ones the are bleow minCost+chi2(#params)
+%% Filter to the ones the are below minCost+chi2(#params)
 filterIdx = SPcost < miniCost+chi2inv(0.95,length(bestParams));
 
-%% return the parameters and the cost, which fullfills the demand, into memory
+%% return the parameters and the cost, which fulfils the demand, into memory
 [sampledCost, sampledParameters] = gather(SPcost(filterIdx), SPparams(filterIdx,:));
 
 SPsize = size(sampledCost,1);
@@ -44,7 +44,7 @@ end
 warning('on','all')
 fprintf('Simulation uncertainty boundary search completed\n')
      
-%% Genarate stuct
+%% Generate struct
 fieldNames = fieldnames(ShmuelData);
 fields = [fieldNames';cell(1,length(fieldNames))];
 ShmuelSimulation = struct(fields{:});

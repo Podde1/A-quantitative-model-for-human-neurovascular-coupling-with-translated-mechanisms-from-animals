@@ -35,7 +35,7 @@ try
     mexCompilerInfo = mex.getCompilerConfigurations('C', 'Selected');
     
     if contains(mexCompilerInfo.Name, "Microsoft Visual")
-        throw(MException('ME:mex', 'Microsoft Visual studio will not work as a mex-compiler, recomended mex-compiler Matlab add-on: MinGw-64 \n'));
+        throw(MException('ME:mex', 'Microsoft Visual studio will not work as a mex-compiler, recommended mex-compiler Matlab add-on: MinGw-64 \n'));
     end
     
     %% Check installation of AMICI     
@@ -51,7 +51,7 @@ try
         end
     end
     
-    %% Generate model files and Plot the artcile results
+    %% Generate model files and Plot the article results
     GenerateModels;
     PlotArticleFigures;
     

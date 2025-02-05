@@ -1,4 +1,4 @@
-%% Ploting script that generates figure 6 from the article
+%% Plotting script that generates figure 6 from the article
 load('GenerateData\GeneratedModelUncertainties/ShmuelStructs.mat')
 Res = ShmuelSimulation;
 
