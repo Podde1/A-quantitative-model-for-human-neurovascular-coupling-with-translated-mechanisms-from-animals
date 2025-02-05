@@ -360,11 +360,17 @@ hCBF= subplot(5,3,5);
 %% test vascular contributions 
 [~, ~, Con, tend, theta] = optsetupfunction(5);
 
-%%% Negative BOLD
- thetaneg = theta(1:37);
- thetaneg([1 2 3]) = theta(43:45);
- thetaneg(4:9)=theta(46:51);
- thetaneg(10:12) = theta(end-2:end);
+% obs theta(41:42) are the sign parameters
+thetapos = theta(1:37);
+
+thetaneg = theta(1:37);
+thetaneg([1 2 3]) = theta(43:45);
+thetaneg(4:9)=theta(46:51);
+thetaneg(10:12) = theta(55:57);
+
+
+thetapos = [10.^(thetapos); 0];
+thetaneg = [10.^(thetaneg); 0];
 
 %%
 options = amioption('sensi',0,...
@@ -387,32 +393,70 @@ HbR_0 = sol.y(3);
 SaO2_0 = sol.y(4);
 ScO2_0 = sol.y(5);
 SvO2_0 = sol.y(6);
+p1 = 1; 
+p2 = 1; 
+p3 = 1; 
+stim_onoff = 1; 
 
-Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
+Constants = [sol.x(end,[11 9 13]), Ca_start, Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0, p1, p2, p3, stim_onoff];
+
+p1_neg = theta(41); 
+p2_neg = theta(42); 
+p3_neg = -1; 
+
+Constants_neg = [sol.x(end,[11 9 13]), Ca_start, Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0, p1_neg, p2_neg, p3_neg, stim_onoff];
+
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-5;
 options.rtol = 1e-6;
-     
-PosSim_CBV_BOLD = simulate_Huber(0:0.2:timeV(end), theta(1:37), Constants, [], options);
-    NOVSM1 = 10^theta(27)*(PosSim_CBV_BOLD.x(:,11)-PosSim_CBV_BOLD.x(1,11));
-    PGEVSM1 = 10^theta(28)*(PosSim_CBV_BOLD.x(:,9)-PosSim_CBV_BOLD.x(1,9));
-    NPYVSM1 = 10^theta(29)*(PosSim_CBV_BOLD.x(:,13)-PosSim_CBV_BOLD.x(1,13));
-    
-NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta(41), theta(42)], [], options);
-    NOVSM2 = 10^thetaneg(27)*(NegSim_CBV_BOLD.x(:,11)-NegSim_CBV_BOLD.x(1,11));
-    PGEVSM2 = 10^thetaneg(28)*(NegSim_CBV_BOLD.x(:,9)-NegSim_CBV_BOLD.x(1,9));
-    NPYVSM2 = 10^thetaneg(29)*(NegSim_CBV_BOLD.x(:,13)-NegSim_CBV_BOLD.x(1,13));
-    
 
- 
-        
+optionsPos = options;
+optionsNeg = options;
+
+%% Simulations
+    %positive
+    t1 = [0,0.5, 1.5:1.5:tend(1)];
+    PosSim_CBV_BOLD = simulate_Model(t1, thetapos, Constants, [], optionsPos);
+    
+    optionsPos.x0 = PosSim_CBV_BOLD.x(end,:)';
+    Constants(end) = 0;
+    t2 = (tend(1):1.5:60) -tend(1);
+    PosSim_CBV_BOLD2 = simulate_Model(t2, thetapos, Constants, [], optionsPos); 
+    
+    SimPos.t = [t1, t2(2:end)+tend(1)];
+    SimPos.y = [PosSim_CBV_BOLD.y ; PosSim_CBV_BOLD2.y(2:end,:)];
+    SimPos.x = [PosSim_CBV_BOLD.x ; PosSim_CBV_BOLD2.x(2:end,:)];
+
+    
+    %negative
+    t1 = [0,0.5, 1.5:1.5:tend(1)];
+    NegSim_CBV_BOLD = simulate_Model(t1, thetaneg, Constants_neg, [], optionsNeg);
+    
+    optionsNeg.x0 = NegSim_CBV_BOLD.x(end,:)';
+    Constants_neg(end) = 0;
+    t2 = (tend(1):1.5:60) -tend(1);
+    NegSim_CBV_BOLD2 = simulate_Model(t2, thetaneg, Constants_neg, [], optionsNeg);
+    
+    SimNeg.t = [t1, t2(2:end)+tend(1)];
+    SimNeg.y = [NegSim_CBV_BOLD.y ; NegSim_CBV_BOLD2.y(2:end,:)];
+    SimNeg.x = [NegSim_CBV_BOLD.x ; NegSim_CBV_BOLD2.x(2:end,:)];
+
+    %
+    NOVSM1  = thetapos(27)*(SimPos.x(:,11)-SimPos.x(1,11));
+    PGEVSM1 = thetapos(28)*(SimPos.x(:,9)-SimPos.x(1,9));
+    NPYVSM1 = thetapos(29)*(SimPos.x(:,13)-SimPos.x(1,13));
+    
+    NOVSM2  = thetaneg(27)*(SimNeg.x(:,11)-SimNeg.x(1,11));
+    PGEVSM2 = thetaneg(28)*(SimNeg.x(:,9)-SimNeg.x(1,9));
+    NPYVSM2 = thetaneg(29)*(SimNeg.x(:,13)-SimNeg.x(1,13));
+    
         
 %% positive Vascular
     hVasc1= subplot(5,3,7);
         hold on
-        VascPosNO=plot(PosSim_CBV_BOLD.t,NOVSM1,'-','color',CNOVSM,'linewidth',2);
-        VascPosPGE2=plot(PosSim_CBV_BOLD.t,PGEVSM1,'-','color',CPGE2VSM,'linewidth',2);
-        VascPosNPY=plot(PosSim_CBV_BOLD.t,NPYVSM1,'-','color',CNPYVSM,'linewidth',2);
+        VascPosNO=plot(SimPos.t,NOVSM1,'-','color',CNOVSM,'linewidth',2);
+        VascPosPGE2=plot(SimPos.t,PGEVSM1,'-','color',CPGE2VSM,'linewidth',2);
+        VascPosNPY=plot(SimPos.t,NPYVSM1,'-','color',CNPYVSM,'linewidth',2);
         
         axis tight
         hVasc1.FontSize=FontSize;
@@ -443,9 +487,9 @@ NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta
 %% negative Vascular
     hVasc2= subplot(5,3,8);
         hold on
-        VascNegNO=plot(NegSim_CBV_BOLD.t,NOVSM2,'-','color',CNOVSM,'linewidth',2);
-        VascNegPGE2=plot(NegSim_CBV_BOLD.t,PGEVSM2,'-','color',CPGE2VSM,'linewidth',2);
-        VascNegNPY=plot(NegSim_CBV_BOLD.t,NPYVSM2,'-','color',CNPYVSM,'linewidth',2);
+        VascNegNO=plot(SimNeg.t,NOVSM2,'-','color',CNOVSM,'linewidth',2);
+        VascNegPGE2=plot(SimNeg.t,PGEVSM2,'-','color',CPGE2VSM,'linewidth',2);
+        VascNegNPY=plot(SimNeg.t,NPYVSM2,'-','color',CNPYVSM,'linewidth',2);
         
         axis tight
         hVasc2.FontSize=FontSize;
@@ -476,9 +520,9 @@ NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta
 %% Hb 
     hHb= subplot(5,3,10);
         hold on
-        HbT=plot(PosSim_CBV_BOLD.t,PosSim_CBV_BOLD.y(:,6),'-','color',CHbT,'linewidth',2);
-        HbO=plot(PosSim_CBV_BOLD.t,PosSim_CBV_BOLD.y(:,7),'-','color',CHbO,'linewidth',2);
-        HbR=plot(PosSim_CBV_BOLD.t,PosSim_CBV_BOLD.y(:,8),'-','color',CHbR,'linewidth',2);
+        HbT=plot(SimPos.t,SimPos.y(:,3),'-','color',CHbT,'linewidth',2);
+        HbO=plot(SimPos.t,SimPos.y(:,4),'-','color',CHbO,'linewidth',2);
+        HbR=plot(SimPos.t,SimPos.y(:,5),'-','color',CHbR,'linewidth',2);
         
         axis tight
         hHb.FontSize=FontSize;
@@ -504,9 +548,9 @@ NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta
 %% Hb negative
     hHb2= subplot(5,3,11);
         hold on
-        HbTneg=plot(NegSim_CBV_BOLD.t,NegSim_CBV_BOLD.y(:,6),'-','color',CHbT,'linewidth',2);
-        HbOneg=plot(NegSim_CBV_BOLD.t,NegSim_CBV_BOLD.y(:,7),'-','color',CHbO,'linewidth',2);
-        HbRneg=plot(NegSim_CBV_BOLD.t,NegSim_CBV_BOLD.y(:,8),'-','color',CHbR,'linewidth',2);
+        HbTneg=plot(SimNeg.t,SimNeg.y(:,3),'-','color',CHbT,'linewidth',2);
+        HbOneg=plot(SimNeg.t,SimNeg.y(:,4),'-','color',CHbO,'linewidth',2);
+        HbRneg=plot(SimNeg.t,SimNeg.y(:,5),'-','color',CHbR,'linewidth',2);
         
         axis tight
         hHb2.FontSize=FontSize;
@@ -532,7 +576,7 @@ NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta
 %% LFP
         hLFP= subplot(5,3,13); 
         hold on
-        LFPpos=plot([-3;-2;-1;PosSim_CBV_BOLD.t],[0;0;0;PosSim_CBV_BOLD.x(:,3)],'-','color',CLFP,'linewidth',2);
+        LFPpos=plot([-3;-2;-1;SimPos.t'],[0;0;0;SimPos.x(:,3)],'-','color',CLFP,'linewidth',2);
         
         axis tight
         hLFP.FontSize=FontSize;
@@ -562,7 +606,7 @@ NegSim_CBV_BOLD = simulate_HuberNeg(0:0.2:timeV(end), thetaneg, [Constants,theta
 %% LFP negative
         hLFP2= subplot(5,3,14); 
         hold on
-        LFPneg=plot([-3;-2;-1; NegSim_CBV_BOLD.t],[0;0;0;NegSim_CBV_BOLD.x(:,3)],'-','color',CLFPneg,'linewidth',2);
+        LFPneg=plot([-3;-2;-1; SimNeg.t'],[0;0;0;SimNeg.x(:,3)],'-','color',CLFPneg,'linewidth',2);
         
         axis tight
         hLFP2.FontSize=FontSize;
