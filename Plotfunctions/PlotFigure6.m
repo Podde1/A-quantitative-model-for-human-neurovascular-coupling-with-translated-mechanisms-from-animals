@@ -169,14 +169,14 @@ hBOLD= subplot(3,2,1);
 %% test vascular contributions 
 [~,  ~, Con, tend, theta] = optsetupfunction(4);
 
-options = amioption('sensi',0,...
-    'maxsteps',1e3);
-options.sensi = 0;
-
-%% SS simulation
+thetapos = theta(1:38);
+% obs theta(42:43) are the signs parameters 
 thetaneg = theta(1:38);
 thetaneg([1 2 3]) = theta(39:41);
 thetaneg(4:12)=theta(44:end);
+
+thetapos = 10.^(thetapos);
+thetaneg = 10.^(thetaneg);
 
 options = amioption('sensi',0,...
     'maxsteps',1e3);
@@ -190,38 +190,71 @@ sol = simulate_SSModel(inf,thetapos(4:38),[Ca_start,Con],[],options);
 
 % assaign values to constants in the stimulation simulation
 options.x0 = sol.x(end,:).';
+p1 = 1; 
+p2 = 1; 
+p3 = 1; 
+stim_onoff = 1; 
 
 TE = 20*10^-3;       B0 = 4.7;
 
-Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, sol.y(end, 2:6), TE, B0];
-Constants_neg = [sol.x(end,[11 9 13]), Ca_start, tend(1) + 1, Con, sol.y(end, 2:6), TE, B0]; %LFP neg is set to have 21 sec stim length
+Constants = [sol.x(end,[11 9 13]), Ca_start, Con, sol.y(end, 2:6), TE, B0, p1, p2, p3, stim_onoff];
+
+p1_neg = theta(42); 
+p2_neg = theta(43); 
+p3_neg = -1; 
+
+Constants_neg = [sol.x(end,[11 9 13]), Ca_start, Con, sol.y(end, 2:6), TE, B0, p1_neg, p2_neg, p3_neg, stim_onoff]; %Neg stimulation set to 21 sec
 
 % alter simulation tolerances, DAE solver can not handle the default values
 options.atol = 1e-6;
 options.rtol = 1e-12;
+optionsPos = options;
+optionsNeg = options;
 
 %% Simulations
-   solReal = simulate_SensoryShmuel(0:0.2:40, theta(1:38), Constants, [], options);
-   solRealneg = simulate_SensorynegativeShmuel(0:0.2:40, thetaneg, [Constants_neg,theta(42), theta(43)], [], options);
+    t1 = 0:0.5:tend(1);
+    solReal = simulate_Model(t1, thetapos, Constants, [], optionsPos);
+    optionsPos.x0 = solReal.x(end,:)';
+
+    t2 = (tend(1):0.5:40) - tend(1);
+    Constants(end) = 0; 
+    solReal2 = simulate_Model(t2, thetapos, Constants, [], optionsPos);
     
+    simPos.t = [t1, t2(2:end)+tend(1)];
+    simPos.x = [solReal.x ; solReal2.x(2:end,:)];
+    simPos.y = [solReal.y ; solReal2.y(2:end,:)];
+    
+    % 
+    t1 = 0:0.5:(tend(1)+1);
+    solRealneg = simulate_ModelNegative(t1, thetaneg, Constants_neg, [], optionsNeg);
+    
+    optionsNeg.x0 = solRealneg.x(end,:)';
+    Constants_neg(end) = 0;
+    t2 = ((tend(1)+1):0.5:40) - (tend(1)+1);
+    solRealneg2 = simulate_ModelNegative(t2, thetaneg, Constants_neg, [], optionsNeg);
+    
+    simNeg.t = [t1, t2(2:end)+(tend(1)+1)];
+    simNeg.x = [solRealneg.x ; solRealneg2.x(2:end,:)];
+    simNeg.y = [solRealneg.y ; solRealneg2.y(2:end,:)];
+
     % POS
-    NOVSM = 10^theta(27)*(solReal.x(:,11)-solReal.x(1,11));
-    PGEVSM = 10^theta(28)*(solReal.x(:,9)-solReal.x(1,9));
-    NPYVSM = 10^theta(29)*(solReal.x(:,13)-solReal.x(1,13));
+    NOVSM  = thetapos(27)*(simPos.x(:,11)-simPos.x(1,11));
+    PGEVSM = thetapos(28)*(simPos.x(:,9)-simPos.x(1,9));
+    NPYVSM = thetapos(29)*(simPos.x(:,13)-simPos.x(1,13));
 
     % NEG
-    NOVSM1 = 10^theta(27)*(solRealneg.x(:,11)-solRealneg.x(1,11));
-    PGEVSM1 = 10^theta(28)*(solRealneg.x(:,9)-solRealneg.x(1,9));
-    NPYVSM1 = 10^theta(29)*(solRealneg.x(:,13)-solRealneg.x(1,13));
+    NOVSM1  = thetaneg(27)*(simNeg.x(:,11)-simNeg.x(1,11));
+    PGEVSM1 = thetaneg(28)*(simNeg.x(:,9)-simNeg.x(1,9));
+    NPYVSM1 = thetaneg(29)*(simNeg.x(:,13)-simNeg.x(1,13));
 
     
 
     hVasc1= subplot(3,2,3);
         %% positive Vascular
         hold on
-        VascPosNO=plot(solReal.t,NOVSM,'-','color',CNOVSM,'linewidth',2);
-        VascPosPGE2=plot(solReal.t,PGEVSM,'-','color',CPGE2VSM,'linewidth',2);
-        VascPosNPY=plot(solReal.t,NPYVSM,'-','color',CNPYVSM,'linewidth',2);
+        VascPosNO   = plot(simPos.t,NOVSM,'-','color',CNOVSM,'linewidth',2);
+        VascPosPGE2 = plot(simPos.t,PGEVSM,'-','color',CPGE2VSM,'linewidth',2);
+        VascPosNPY  = plot(simPos.t,NPYVSM,'-','color',CNPYVSM,'linewidth',2);
         
         axis tight
         axis([0 40 -0.3 0.7])
@@ -260,9 +293,9 @@ options.rtol = 1e-12;
     hVasc2= subplot(3,2,4);
          %% Negative Vascular
         hold on
-        VascNegNO=plot(solRealneg.t,NOVSM1,'-','color',CNOVSM,'linewidth',2);
-        VascNegPGE2=plot(solRealneg.t,PGEVSM1,'-','color',CPGE2VSM,'linewidth',2);
-        VascNegNPY=plot(solRealneg.t,NPYVSM1,'-','color',CNPYVSM,'linewidth',2);
+        VascNegNO   = plot(simNeg.t,NOVSM1,'-','color',CNOVSM,'linewidth',2);
+        VascNegPGE2 = plot(simNeg.t,PGEVSM1,'-','color',CPGE2VSM,'linewidth',2);
+        VascNegNPY  = plot(simNeg.t,NPYVSM1,'-','color',CNPYVSM,'linewidth',2);
 
         axis tight
         axis([0 40 -0.12 0.1])
@@ -297,9 +330,9 @@ options.rtol = 1e-12;
     hHb= subplot(3,2,5);
          %% Negative Vascular
         hold on
-        plot(solReal.t,solReal.y(:,8),'-','color',CHbT,'linewidth',2);
-        plot(solReal.t,solReal.y(:,9),'-','color',CHbO,'linewidth',2);
-        plot(solReal.t,solReal.y(:,10),'-','color',CHbR,'linewidth',2);
+        plot(simPos.t,simPos.y(:,3),'-','color',CHbT,'linewidth',2);
+        plot(simPos.t,simPos.y(:,4),'-','color',CHbO,'linewidth',2);
+        plot(simPos.t,simPos.y(:,5),'-','color',CHbR,'linewidth',2);
 
         axis tight
         hHb.FontSize=FontSize;
@@ -339,9 +372,9 @@ options.rtol = 1e-12;
     hHb2= subplot(3,2,6);
          %% Negative Vascular
         hold on
-        PHbT=plot(solRealneg.t,solRealneg.y(:,8),'-','color',CHbT,'linewidth',2);
-        PHbO=plot(solRealneg.t,solRealneg.y(:,9),'-','color',CHbO,'linewidth',2);
-        PHbR=plot(solRealneg.t,solRealneg.y(:,10),'-','color',CHbR,'linewidth',2);
+        PHbT=plot(simNeg.t,simNeg.y(:,3),'-','color',CHbT,'linewidth',2);
+        PHbO=plot(simNeg.t,simNeg.y(:,4),'-','color',CHbO,'linewidth',2);
+        PHbR=plot(simNeg.t,simNeg.y(:,5),'-','color',CHbR,'linewidth',2);
 
         axis tight
         hHb2.FontSize=FontSize;
