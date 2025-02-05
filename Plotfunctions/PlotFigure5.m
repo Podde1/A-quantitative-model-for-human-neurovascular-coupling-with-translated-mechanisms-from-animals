@@ -161,11 +161,11 @@ figure('Name', 'Figure 5_plots')
         alpha(c3,.2);
         uistack(c3,'bottom');
 
-        p1=plot(Data.Sensory2.t,Res.Sensory2.HbT.sim(timeV6),'-','linewidth',2,'Color',CHbT);
+        p_1=plot(Data.Sensory2.t,Res.Sensory2.HbT.sim(timeV6),'-','linewidth',2,'Color',CHbT);
         e1=errorbar(Data.Sensory2.t,Data.Sensory2.Y(:,1),Data.Sensory2.Sigma_Y(:,1),'*','Color',CHbT);
-        p2=plot(Data.Sensory2.t,Res.Sensory2.HbO.sim(timeV6),'-', 'color', CHbO,'linewidth',2);
+        p_2=plot(Data.Sensory2.t,Res.Sensory2.HbO.sim(timeV6),'-', 'color', CHbO,'linewidth',2);
         e2=errorbar(Data.Sensory2.t,Data.Sensory2.Y(:,2),Data.Sensory2.Sigma_Y(:,2),'*', 'color', CHbO);
-        p3=plot(Data.Sensory2.t,Res.Sensory2.HbR.sim(timeV6),'-', 'color', CHbR,'linewidth',2);
+        p_3=plot(Data.Sensory2.t,Res.Sensory2.HbR.sim(timeV6),'-', 'color', CHbR,'linewidth',2);
         e3=errorbar(Data.Sensory2.t,Data.Sensory2.Y(:,3),Data.Sensory2.Sigma_Y(:,3),'*', 'color', CHbR');
         axis([0 10 -3 6.5])
         rectangle('Position',[0,-1.2,2,sizebar*sum(abs(hSens2.YLim))*0.5],'FaceColor','k')
@@ -361,17 +361,19 @@ figure('Name', 'Figure 5_plots')
     [~, Data, Con, tend, ~] = optsetupfunction(3);
     bestParams = load('theta_Desjardins_VSM.mat');
     theta = bestParams.X';
+    theta = 10.^(theta);
     
     %params 
-    pOGin=theta(1:36);
-    pOGex=[theta(37) theta(3:36)];
-    pSensLong=[theta(38:40) theta(3:36)];
+    pOGin = [theta(1:2) 0 theta(3:36) 0];       % add dummy ku3 and ky4
+    pOGex = [0 0 theta(37) theta(3:36) 0];      % add dummy ku1, ku2 and ky4
+    pSensLong = [theta(38:40) theta(3:36) 0];   % add dummy ky4
 
     % simoptions
     options = amioption('sensi',0,...
         'maxsteps',1e5);
     options.sensi = 0;
     options.nmaxevent=1e4;
+    
     % values for initial saturations and pressure
     Ca_start = 10;
 
@@ -386,42 +388,113 @@ figure('Name', 'Figure 5_plots')
     SaO2_0 = sol.y(4);
     ScO2_0 = sol.y(5);
     SvO2_0 = sol.y(6);
-
+    p1 = 1; 
+    p2 = 1;  
+    p3 = 1;
+    stim_onoff = 1;
+    
     options.x0 = sol.x(end,:).';
 
     TE = 20*10^-3;       B0 = 7;
 
-    Constants = [sol.x(end,[11 9 13]), Ca_start, tend(1), Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0];
-
+    Constants = [sol.x(end,[11 9 13]), Ca_start, Con, HbO_0, HbR_0, SaO2_0, ScO2_0, SvO2_0, TE, B0, p1, p2, p3, stim_onoff];
+    
     % alter simulation tolerances, DAE solver can not handle the default values
     options.atol = 1e-6;
     options.rtol = 1e-9;
-     optionsLong=options;
-    optionsLong.maxsteps=1e6;    
-
-
-    Constants(5) = tend(1);
-        simOGin20 = simulate_OGinhibitoryDesjardins(0:1:Data.OGinhibitory20.t(end),pOGin,Constants,[] , optionsLong);
-        simOGex20 = simulate_OGexcitatoryDesjardins(0:1:Data.OGexcitatory20.t(end),pOGex,Constants, [], optionsLong);
-        simSens20 = simulate_SensoryDesjardins(0:1:Data.Sensory20.t(end),pSensLong,Constants,[],optionsLong);
-     
-    NOVSM = 10^pOGin(26)*(simOGin20.x(:,11)-simOGin20.x(1,11));
-    PGEVSM = 10^pOGin(27)*(simOGin20.x(:,9)-simOGin20.x(1,9));
-    NPYVSM = 10^pOGin(28)*(simOGin20.x(:,13)-simOGin20.x(1,13));
-        
-    NOVSM2 = 10^pOGex(25)*(simOGex20.x(:,11)-simOGex20.x(1,11));    
-    PGEVSM2 = 10^pOGex(26)*(simOGex20.x(:,9)-simOGex20.x(1,9));
-    NPYVSM2 = 10^pOGex(27)*(simOGex20.x(:,13)-simOGex20.x(1,13));
+    options.maxsteps=1e6;
     
-    NOVSM3 = 10^pSensLong(27)*(simSens20.x(:,11)-simSens20.x(1,11));
-    PGEVSM3 = 10^pSensLong(28)*(simSens20.x(:,9)-simSens20.x(1,9));
-    NPYVSM3 = 10^pSensLong(29)*(simSens20.x(:,13)-simSens20.x(1,13));    
+    optEx20 = options;
+    optIn20 = options;
+    optSens20 = options;  
+
+    % Simulation OptoGenatic Inhibitory 20 sec stim
+    timeIn20 = [];
+    OGIn20x = [];
+
+    for i=1:1:tend(1)
+        Constants(end) = 1;
+        t1 = [(i-1) (i-1+0.1)] - (i-1);
+        simOGin20 = simulate_Model(t1 ,pOGin,Constants, [], optIn20);
+
+        optIn20.x0 = simOGin20.x(end,:)';
+        Constants(end) = 0;
+        if i==tend(1)
+            t2 = ((i-1+0.1):0.1:Data.OGinhibitory20.t(end))-(i-1+0.1);
+        else
+            t2 = ((i-1+0.1):0.1:i) - (i-1+0.1);
+        end
+        simOGin20b = simulate_Model(t2,pOGin,Constants, [], optIn20);
+        optIn20.x0 = simOGin20b.x(end,:)';
+
+        if i>1
+            timeIn20 = [timeIn20 t1(2)+(i-1) t2(2:end)+(i-1+0.1)];
+            OGIn20x = [OGIn20x; simOGin20.x(2,[11,9,13]); simOGin20b.x(2:end,[11,9,13])];
+        else
+            timeIn20 = [timeIn20 t1+(i-1) t2(2:end)+(i-1+0.1)];
+            OGIn20x = [OGIn20x; simOGin20.x(:,[11,9,13]); simOGin20b.x(2:end,[11,9,13])];
+        end
+    end
+    
+    % Simulation OptoGenatic Excitatory 20 sec stim
+    timeEx20 = [];
+    OGEx20x = [];
+
+    for i=1:1:tend(1)
+        Constants(end) = 1;
+        t1 = [(i-1) (i-1+0.1)] - (i-1);
+        simOGEx20 = simulate_Model(t1 ,pOGex,Constants, [], optEx20);
+
+        optEx20.x0 = simOGEx20.x(end,:)';
+        Constants(end) = 0;
+        if i==tend(1)
+            t2 = ((i-1+0.1):0.1:Data.OGexcitatory20.t(end))-(i-1+0.1);
+        else
+            t2 = ((i-1+0.1):0.1:i) - (i-1+0.1);
+        end
+        simOGEx20b = simulate_Model(t2,pOGex,Constants, [], optEx20);
+        optEx20.x0 = simOGEx20b.x(end,:)';
+
+        if i>1
+            timeEx20 = [timeEx20 t1(2)+(i-1) t2(2:end)+(i-1+0.1)];
+            OGEx20x = [OGEx20x; simOGEx20.x(2,[11,9,13]); simOGEx20b.x(2:end,[11,9,13])];
+        else
+            timeEx20 = [timeEx20 t1+(i-1) t2(2:end)+(i-1+0.1)];
+            OGEx20x = [OGEx20x; simOGEx20.x(:,[11,9,13]); simOGEx20b.x(2:end,[11,9,13])];
+        end
+    end
+
+    % Simulation Sensory 20 sec stim
+    Constants(end) = 1;
+    t1 = unique([Data.Sensory20.t(Data.Sensory20.t<=tend(1)); tend(1)]);
+    simSens20 = simulate_ModelDesjardinsSensory(t1 ,pSensLong,Constants, [], optSens20);
+
+    optSens20.x0 = simSens20.x(end,:)';
+    Constants(end) = 0;
+    t2 = [tend(1); Data.Sensory20.t(Data.Sensory20.t>tend(1))] - tend(1);
+    simSens20b = simulate_ModelDesjardinsSensory(t2,pSensLong,Constants, [], optSens20);
+
+    timeSens20 = [t1; t2(2:end)+tend(1)];
+    Sens20x = [simSens20.x(:,[11,9,13]); simSens20b.x(2:end,[11,9,13])];
+        
+     
+    NOVSM  = pOGin(27)*(OGIn20x(:,1)-OGIn20x(1,1));
+    PGEVSM = pOGin(28)*(OGIn20x(:,2)-OGIn20x(1,2));
+    NPYVSM = pOGin(29)*(OGIn20x(:,3)-OGIn20x(1,3));
+        
+    NOVSM2  = pOGex(27)*(OGEx20x(:,1)-OGEx20x(1,1));    
+    PGEVSM2 = pOGex(28)*(OGEx20x(:,2)-OGEx20x(1,2));
+    NPYVSM2 = pOGex(29)*(OGEx20x(:,3)-OGEx20x(1,3));
+    
+    NOVSM3  = pSensLong(27)*(Sens20x(:,1)-Sens20x(1,1));
+    PGEVSM3 = pSensLong(28)*(Sens20x(:,2)-Sens20x(1,2));
+    NPYVSM3 = pSensLong(29)*(Sens20x(:,3)-Sens20x(1,3));    
 %% Vascular stimuli OG in
     hVascOGin = subplot(4,3,7);
         hold on 
-        NO = plot(simOGin20.t, NOVSM, '-', 'color', CNOVSM, 'linewidth', 2);
-        NPY = plot(simOGin20.t, NPYVSM, '-', 'color', CNPYVSM, 'linewidth', 2);
-        PGE = plot(simOGin20.t, PGEVSM, '-', 'color', CPGE2VSM, 'linewidth', 2);
+        NO = plot(timeIn20, NOVSM, '-', 'color', CNOVSM, 'linewidth', 2);
+        NPY = plot(timeIn20, NPYVSM, '-', 'color', CNPYVSM, 'linewidth', 2);
+        PGE = plot(timeIn20, PGEVSM, '-', 'color', CPGE2VSM, 'linewidth', 2);
         
         axis([0 60 min([NOVSM; NPYVSM; PGEVSM]) max([NOVSM; NPYVSM; PGEVSM])])
         rectangle('Position',[0, (min([NOVSM; NPYVSM; PGEVSM])-0.03),20,sizebar*sum(abs(hVascOGin.YLim))*1],'FaceColor','k')
@@ -446,9 +519,9 @@ figure('Name', 'Figure 5_plots')
 %% Vascular stimuli OG ex
     hVascOGex = subplot(4,3,8);
         hold on 
-        NO2 = plot(simOGex20.t, NOVSM2, '-', 'color', CNOVSM, 'linewidth', 2);
-        NPY2 = plot(simOGex20.t, NPYVSM2, '-', 'color', CNPYVSM, 'linewidth', 2);
-        PGE2 = plot(simOGex20.t, PGEVSM2, '-', 'color', CPGE2VSM, 'linewidth', 2);
+        NO2 = plot(timeEx20, NOVSM2, '-', 'color', CNOVSM, 'linewidth', 2);
+        NPY2 = plot(timeEx20, NPYVSM2, '-', 'color', CNPYVSM, 'linewidth', 2);
+        PGE2 = plot(timeEx20, PGEVSM2, '-', 'color', CPGE2VSM, 'linewidth', 2);
         
         axis([0 60 min([NOVSM2; NPYVSM2; PGEVSM2]) max([NOVSM2; NPYVSM2; PGEVSM2])])
         rectangle('Position',[0, (min([NOVSM2; NPYVSM2; PGEVSM2])-0.05) ,20,sizebar*sum(abs(hVascOGex.YLim))*1.2],'FaceColor','k')
@@ -471,9 +544,9 @@ figure('Name', 'Figure 5_plots')
 %% Vascular stimuli Sens
     hVascSens = subplot(4,3,9);
         hold on 
-        NO3 = plot(simSens20.t, NOVSM3, '-', 'color', CNOVSM, 'linewidth', 2);
-        NPY3 = plot(simSens20.t, NPYVSM3, '-', 'color', CNPYVSM, 'linewidth', 2);
-        PGE3 = plot(simSens20.t, PGEVSM3, '-', 'color', CPGE2VSM, 'linewidth', 2);
+        NO3 = plot(timeSens20, NOVSM3, '-', 'color', CNOVSM, 'linewidth', 2);
+        NPY3 = plot(timeSens20, NPYVSM3, '-', 'color', CNPYVSM, 'linewidth', 2);
+        PGE3 = plot(timeSens20, PGEVSM3, '-', 'color', CPGE2VSM, 'linewidth', 2);
         
         axis([0 60 min([NOVSM3; NPYVSM3; PGEVSM3]) max([NOVSM3; NPYVSM3; PGEVSM3])])
         rectangle('Position',[0,(min([NOVSM3; NPYVSM3; PGEVSM3])-0.03),20,sizebar*sum(abs(hVascSens.YLim))*1.2],'FaceColor','k')
@@ -562,44 +635,43 @@ figure('Name', 'Figure 5_plots')
     ahVasc.Visible = 'on';
     ahVasc.Position(1:2) = [310 2.79];   
 %% numbering of subplots
-        [~,hA]=suplabel('A','t',[.02 .08 0 .88]);
-        hA.FontSize=14;
-        hA.Position(1) = 60;
-        
-        [~,hB]=suplabel('B','t',[.02 .08 0.77 .88]);
-        hB.FontSize=14;
+    [~,hA]=suplabel('A','t',[.02 .08 0 .88]);
+    hA.FontSize=14;
+    hA.Position(1) = 60;
 
-        [~,hC]=suplabel('C','t',[.08 .08 1.26 .88]);
-        hC.FontSize=14;
+    [~,hB]=suplabel('B','t',[.02 .08 0.77 .88]);
+    hB.FontSize=14;
 
-        [~,hD]=suplabel('D','t',[.02 .08 0 .655]);
-        hD.FontSize=14;
-        hD.Position(1) = 60;
-        
-        [~,hE]=suplabel('E','t',[.02 .08 0.77 .655]);
-        hE.FontSize=14;
-        
-        [~,hF]=suplabel('F','t',[.08 .08 1.26 .655]);
-        hF.FontSize=14;
-     
-        [~,hG]=suplabel('G','t',[.02 .08 0 .415]);
-        hG.FontSize=14;
-        hG.Position(1) = 60;
-        
-        [~,hH]=suplabel('H','t',[.02 .08 0.77 .415]);
-        hH.FontSize=14;
-        
-        [~,hI]=suplabel('I','t',[.08 .08 1.26 .415]);
-        hI.FontSize=14;
-        
-        [~,hJ]=suplabel('J','t',[.02 .08 0 .15]);
-        hJ.FontSize=14;
-        hJ.Position(1) = 60;
-%         
+    [~,hC]=suplabel('C','t',[.08 .08 1.26 .88]);
+    hC.FontSize=14;
+
+    [~,hD]=suplabel('D','t',[.02 .08 0 .655]);
+    hD.FontSize=14;
+    hD.Position(1) = 60;
+
+    [~,hE]=suplabel('E','t',[.02 .08 0.77 .655]);
+    hE.FontSize=14;
+
+    [~,hF]=suplabel('F','t',[.08 .08 1.26 .655]);
+    hF.FontSize=14;
+
+    [~,hG]=suplabel('G','t',[.02 .08 0 .415]);
+    hG.FontSize=14;
+    hG.Position(1) = 60;
+
+    [~,hH]=suplabel('H','t',[.02 .08 0.77 .415]);
+    hH.FontSize=14;
+
+    [~,hI]=suplabel('I','t',[.08 .08 1.26 .415]);
+    hI.FontSize=14;
+
+    [~,hJ]=suplabel('J','t',[.02 .08 0 .15]);
+    hJ.FontSize=14;
+    hJ.Position(1) = 60;       
         
   %% Legends
     
-        [hleg]=legend([p2,p1,p3],{'HbT','HbO','HbR'},'FontSize',14,'Location','best');
+        [hleg]=legend([p_2,p_1,p_3],{'HbT','HbO','HbR'},'FontSize',14,'Location','best');
         hleg.ItemTokenSize=[10 10];
         hleg.Box='off';
         hleg.Position(1)=hleg.Position(1)+0.06;
