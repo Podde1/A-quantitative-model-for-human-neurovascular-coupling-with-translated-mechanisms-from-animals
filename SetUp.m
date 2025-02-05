@@ -58,13 +58,13 @@ try
     
     
     %% Check other external tools
-    if contains(pathStr,'MEIGO')
+    if contains(path,'MEIGO')
         install_MEIGO; 
     else
        warning('MEIGO seems to be missing in the working directory, Optimizations will not work without it');
     end
     
-    if ~contains(pathStr,'PESTO')
+    if ~contains(path,'PESTO')
        warning('PESTO seems to be missing in the working directory, MCMC samplings will not work without it');
     end
 
